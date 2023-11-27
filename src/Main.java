@@ -15,6 +15,7 @@ public class Main extends Application {
                 getClass().getResource("MainView.fxml"));
         Parent root = loader.load();
         primaryStage.setScene(new Scene(root));
+        primaryStage.setTitle("MyTunes");
         primaryStage.show();
     }
 }
