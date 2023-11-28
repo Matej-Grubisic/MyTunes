@@ -3,11 +3,16 @@ import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.Random;
 import java.util.logging.Level;
@@ -21,9 +26,10 @@ public class MainController {
     private Button btnNew;
 
     @FXML
-    private void click(ActionEvent actionEvent) {
+    private void click(ActionEvent actionEvent) throws IOException {
+
         System.out.println("Weeeeeeeee!");
-        btnNew.setText("Works");
+        //btnNew.setText("Works");
         SQLServerDataSource ds = new SQLServerDataSource();
         ds.setDatabaseName("mytunes_groupg");
         ds.setUser("CSe2023b_e_6");
@@ -54,5 +60,13 @@ public class MainController {
         catch (SQLException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        FXMLLoader loader1 = new FXMLLoader(
+                getClass().getResource("newsong.fxml")
+        );
+        Parent root = loader1.load();
+        Stage addStage = new Stage();
+        addStage.setScene(new Scene(root));
+        addStage.setTitle("New Song");
+        addStage.show();
     }
 }
