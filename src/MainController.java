@@ -7,15 +7,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MainController {
+
+
     public Label lblMain;
     @FXML
     private Button btnNew;
@@ -25,19 +24,27 @@ public class MainController {
         System.out.println("Weeeeeeeee!");
         btnNew.setText("Works");
         SQLServerDataSource ds = new SQLServerDataSource();
-        ds.setDatabaseName("MyTunesGroupG");
-        ds.setUser("CSe2023b_e_17");
-        ds.setPassword("CSe2023bE17#23");
-        //ds.setPortNumber(1433);
-        ds.setServerName("10.176.111.31");
-        //ds.setTrustServerCertificate(true);
+        ds.setDatabaseName("mytunes_groupg");
+        ds.setUser("CSe2023b_e_6");
+        ds.setPassword("CSe2023bE6#23");
+        ds.setPortNumber(1433);
+        ds.setServerName("10.176.111.34");
+        ds.setTrustServerCertificate(true);
         System.out.println("Please work!");
         try(Connection con = ds.getConnection())
         {
-            String sql = "CREATE TABLE Songs (SongID int, Title varchar(255), Artist varchar(255), Category varchar(255))";
+            String sql = "SELECT * FROM Songs ORDER BY SongID";
             Statement stmt = con.createStatement();
-            stmt.executeQuery(sql);
-            lblMain.setText("works");
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                int id          = rs.getInt("SongID");
+                String Title     = rs.getString("Title");
+                String Artist    = rs.getString("Artist");
+                String Category = rs.getString("Category");
+                String Time = rs.getString("Time");
+                lblMain.setText(Title + " " + "is now playing");
+                System.out.println(id + ", "+ Title + ", " + Artist);
+            }
         }
         catch (SQLServerException sqlse)
         {
