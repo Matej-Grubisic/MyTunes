@@ -22,11 +22,14 @@ public class MainController {
 
 
     public Label lblMain;
+    public Button btnPlaylistN;
+    public Button btnPlaylistE;
+    public Button btnSongE;
     @FXML
-    private Button btnNew;
+    private Button btnSongN;
 
     @FXML
-    private void click(ActionEvent actionEvent) throws IOException {
+    private void newSong(ActionEvent actionEvent) throws IOException {
 
         System.out.println("Weeeeeeeee!");
         //btnNew.setText("Works");
@@ -50,7 +53,7 @@ public class MainController {
                 String Category = rs.getString("Category");
                 String Time = rs.getString("Time");
                 lblMain.setText(Title + " " + "is now playing");
-                System.out.println(id + ", "+ Title + ", " + Artist);
+                System.out.println(id + ", "+ Title + ", " + Artist + "," + Category + "," + Time);
             }
         }
         catch (SQLServerException sqlse)
@@ -69,4 +72,38 @@ public class MainController {
         addStage.setTitle("New Song");
         addStage.show();
     }
+    public void editSong(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader1 = new FXMLLoader(
+                getClass().getResource("newsong.fxml")
+        );
+        Parent root = loader1.load();
+        Stage addStage = new Stage();
+        addStage.setScene(new Scene(root));
+        addStage.setTitle("Edit Song");
+        addStage.show();
+    }
+
+    public void newPlaylist(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader2 = new FXMLLoader(
+                getClass().getResource("newplaylist.fxml")
+        );
+        Parent root = loader2.load();
+        Stage addStage = new Stage();
+        addStage.setScene(new Scene(root));
+        addStage.setTitle("New Playlist");
+        addStage.show();
+    }
+
+    public void editPlaylist(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader2 = new FXMLLoader(
+                getClass().getResource("newplaylist.fxml")
+        );
+        Parent root = loader2.load();
+        Stage addStage = new Stage();
+        addStage.setScene(new Scene(root));
+        addStage.setTitle("Edit Playlist");
+        addStage.show();
+    }
+
+
 }
