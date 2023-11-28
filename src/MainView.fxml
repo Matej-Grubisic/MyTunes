@@ -4,15 +4,28 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <AnchorPane prefHeight="522.0" prefWidth="811.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
    <children>
-      <VBox layoutX="33.0" layoutY="161.0" prefHeight="282.0" prefWidth="179.0" />
-      <VBox layoutX="474.0" layoutY="161.0" prefHeight="282.0" prefWidth="322.0" />
+      <VBox layoutX="33.0" layoutY="161.0" prefHeight="282.0" prefWidth="179.0">
+         <children>
+            <TableView fx:id="table" prefHeight="291.0" prefWidth="179.0">
+              <columns>
+                <TableColumn fx:id="name" prefWidth="61.600006103515625" text="Name" />
+                <TableColumn fx:id="songs" prefWidth="53.59998321533203" text="Songs" />
+                  <TableColumn fx:id="time" prefWidth="63.199981689453125" text="Time" />
+              </columns>
+            </TableView>
+         </children></VBox>
+      <VBox layoutX="474.0" layoutY="161.0" prefHeight="282.0" prefWidth="322.0">
+         <children>
+            <ListView prefHeight="282.0" prefWidth="179.0" />
+         </children></VBox>
       <ListView layoutX="250.0" layoutY="161.0" prefHeight="282.0" prefWidth="179.0" />
       <Button layoutX="28.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
       <Button layoutX="90.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
@@ -20,15 +33,15 @@
       <Button layoutX="250.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
       <Button layoutX="314.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
       <Button layoutX="380.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
-      <Button layoutX="490.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
+      <Button fx:id="btnNew" layoutX="490.0" layoutY="467.0" mnemonicParsing="false" onAction="#click" text="Button" />
       <Button layoutX="557.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
-      <Button layoutX="621.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
+      <Button layoutX="678.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
       <Button layoutX="745.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
       <Button layoutX="432.0" layoutY="161.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="29.0" text="Button" />
       <Label layoutX="583.0" layoutY="29.0" text="Label" />
       <TextField layoutX="621.0" layoutY="25.0" prefHeight="26.0" prefWidth="114.0" />
       <Button layoutX="745.0" layoutY="25.0" mnemonicParsing="false" text="Button" />
-      <Label layoutX="269.0" layoutY="71.0" prefHeight="37.0" prefWidth="221.0" text="Label" />
+      <Label fx:id="lblMain" layoutX="269.0" layoutY="71.0" prefHeight="37.0" prefWidth="221.0" text="Label" />
       <Slider layoutX="62.0" layoutY="83.0" />
       <Button layoutX="97.0" layoutY="34.0" mnemonicParsing="false" text="Button" />
       <Button layoutX="160.0" layoutY="34.0" mnemonicParsing="false" text="Button" />
