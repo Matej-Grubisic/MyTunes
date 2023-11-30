@@ -14,19 +14,20 @@
       <Label layoutX="92.0" layoutY="107.0" text="Category" />
       <Label layoutX="92.0" layoutY="149.0" prefHeight="18.0" prefWidth="42.0" text="Time" />
       <Label layoutX="92.0" layoutY="194.0" prefHeight="18.0" prefWidth="33.0" text="File" />
-      <TextField layoutX="158.0" layoutY="27.0" />
-      <TextField layoutX="158.0" layoutY="65.0" />
-      <TextField layoutX="158.0" layoutY="145.0" />
-      <TextField layoutX="158.0" layoutY="190.0" prefHeight="26.0" prefWidth="197.0" />
-      
+      <TextField fx:id="titleField" layoutX="158.0" layoutY="27.0" />
+      <TextField fx:id="artistField" layoutX="158.0" layoutY="65.0" />
+      <TextField fx:id="categoryField" layoutX="158.0" layoutY="145.0" />
+      <TextField fx:id="timeField" layoutX="158.0" layoutY="190.0" prefHeight="26.0" prefWidth="197.0" />
+      <TextField fx:id="filePathField" layoutX="158.0" layoutY="190.0" prefHeight="26.0" prefWidth="197.0" />
+
       <Button layoutX="371.0" layoutY="188.0" mnemonicParsing="false" text="Choose" />
       <Button layoutX="387.0" layoutY="233.0" mnemonicParsing="false" text="Cancel" />
-      <Button layoutX="452.0" layoutY="233.0" mnemonicParsing="false" text="Save" />
+      <Button layoutX="452.0" layoutY="233.0" mnemonicParsing="false" text="Save" onAction="#saveSong" />
       <MenuButton layoutX="158.0" layoutY="104.0" mnemonicParsing="false" text="MenuButton">
-        <items>
-          <MenuItem mnemonicParsing="false" text="Action 1" />
-          <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
+         <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+         </items>
       </MenuButton>
       <Button layoutX="283.0" layoutY="104.0" mnemonicParsing="false" text="Button" />
    </children>
