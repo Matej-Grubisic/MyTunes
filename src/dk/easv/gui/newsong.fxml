@@ -21,8 +21,8 @@
       <TextField fx:id="filePathField" layoutX="158.0" layoutY="190.0" prefHeight="26.0" prefWidth="197.0" />
 
       <Button layoutX="371.0" layoutY="188.0" mnemonicParsing="false" text="Choose" />
-      <Button layoutX="387.0" layoutY="233.0" mnemonicParsing="false" text="Cancel" />
-      <Button layoutX="452.0" layoutY="233.0" mnemonicParsing="false" text="Save" onAction="#saveSong" />
+      <Button fx:id="btnClose" layoutX="387.0" layoutY="233.0" mnemonicParsing="false" onAction="#closeWin" text="Cancel" />
+      <Button fx:id="btnSave" layoutX="452.0" layoutY="233.0" mnemonicParsing="false" onAction="#saveSong" text="Save" />
       <MenuButton layoutX="158.0" layoutY="104.0" mnemonicParsing="false" text="MenuButton">
          <items>
             <MenuItem mnemonicParsing="false" text="Action 1" />

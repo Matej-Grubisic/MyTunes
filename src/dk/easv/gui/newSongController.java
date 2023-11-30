@@ -1,8 +1,11 @@
 package dk.easv.gui;
 
 import dk.easv.bll.DatabaseConnection;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +13,8 @@ import java.sql.SQLException;
 
 public class newSongController {
 
+    public Button btnClose;
+    public Button btnSave;
     @FXML
     private TextField titleField;
 
@@ -27,9 +32,9 @@ public class newSongController {
 
     @FXML
     private void saveSong() {
-        DatabaseConnection DatabaseUtil = null;
-        try (Connection connection = DatabaseUtil.getConnection()) {
-            String sql = "INSERT INTO Songs (title, artist, category, time, file_path) VALUES (?, ?, ?, ?, ?)";
+        System.out.println("save song: start");
+        try (Connection connection = DatabaseConnection.getConn()) {
+            String sql = "INSERT INTO Songs (Title, Artist, Category, Time, file_path) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, titleField.getText());
                 statement.setString(2, artistField.getText());
@@ -38,9 +43,16 @@ public class newSongController {
                 statement.setString(5, filePathField.getText());
 
                 statement.executeUpdate();
+                Stage stage = (Stage) btnSave.getScene().getWindow();
+                stage.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void closeWin(ActionEvent actionEvent) {
+        Stage stage = (Stage) btnSave.getScene().getWindow();
+        stage.close();
     }
 }

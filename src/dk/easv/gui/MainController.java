@@ -52,8 +52,9 @@ public class MainController {
                 String Artist    = rs.getString("Artist");
                 String Category = rs.getString("Category");
                 String Time = rs.getString("Time");
+                String File = rs.getString("file_path");
                 lblMain.setText(Title + " " + "is now playing");
-                System.out.println(id + ", "+ Title + ", " + Artist + "," + Category + "," + Time);
+                System.out.println(id + ", "+ Title + ", " + Artist + ", " + Category + ", " + Time + ", " + File);
             }
         }
         catch (SQLServerException sqlse)

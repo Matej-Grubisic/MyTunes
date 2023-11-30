@@ -23,7 +23,7 @@ public class DatabaseConnection {
         try (Connection connection = DriverManager.getConnection(JDBC_URL, USER, PASSWORD)) {
         }
     }*/
-   public static Connection getConnection() throws SQLException {
+   public static Connection getConn() throws SQLException {
        return DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
    }
 }
