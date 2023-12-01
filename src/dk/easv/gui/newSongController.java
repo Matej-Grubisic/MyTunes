@@ -4,17 +4,36 @@ import dk.easv.bll.DatabaseConnection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class newSongController {
+import static jdk.jfr.consumer.EventStream.openFile;
 
-    public Button btnClose;
-    public Button btnSave;
+public class newSongController {
+    private final Desktop desktop = Desktop.getDesktop();
+
+
+    public MenuButton btnDrop;
+    @FXML
+    private Button btnClose;
+    @FXML
+    private Button btnSave;
+    @FXML
+    private Button btnChoose;
     @FXML
     private TextField titleField;
 
@@ -38,7 +57,7 @@ public class newSongController {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, titleField.getText());
                 statement.setString(2, artistField.getText());
-                statement.setString(3, categoryField.getText());
+                statement.setString(3, btnDrop.getText());
                 statement.setString(4, timeField.getText());
                 statement.setString(5, filePathField.getText());
 
@@ -51,8 +70,60 @@ public class newSongController {
         }
     }
 
-    public void closeWin(ActionEvent actionEvent) {
+    @FXML
+    private void closeWin(ActionEvent actionEvent) {
         Stage stage = (Stage) btnSave.getScene().getWindow();
         stage.close();
     }
+
+    @FXML
+    private void getPop(ActionEvent actionEvent) {
+        System.out.println("Pop");
+        btnDrop.setText("Pop");
+    }
+
+    @FXML
+    private void getHop(ActionEvent actionEvent) {
+        System.out.println("Hop");
+        btnDrop.setText("Hop");
+    }
+
+    @FXML
+    private void getRap(ActionEvent actionEvent) {
+        System.out.println("Rap");
+        btnDrop.setText("Rap");
+    }
+
+    @FXML
+    private void getRock(ActionEvent actionEvent) {
+        System.out.println("Rock");
+        btnDrop.setText("Rock");
+
+    }
+
+    @FXML
+    private void chooseFile(ActionEvent actionEvent) throws UnsupportedAudioFileException, IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        Window stage = new Stage();
+        configureFileChooser(fileChooser);
+        File file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+            System.out.println();
+            filePathField.setText(String.valueOf(file));
+        }
+
+    }
+
+    private static void configureFileChooser(final FileChooser fileChooser){
+        fileChooser.setTitle("View songs");
+        fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"))
+        );
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("mp3", "*.mp3")
+        );
+    }
+
+
 }
