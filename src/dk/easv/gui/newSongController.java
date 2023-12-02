@@ -85,7 +85,7 @@ public class newSongController {
     @FXML
     private void getHop(ActionEvent actionEvent) {
         System.out.println("Hop");
-        btnDrop.setText("Hop");
+        btnDrop.setText("Hip Hop");
     }
 
     @FXML
