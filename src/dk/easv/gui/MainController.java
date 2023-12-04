@@ -55,7 +55,7 @@ public class MainController {
                 System.out.println(id + ", "+ Title + ", " + Artist + ", " + Category + ", " + Time + ", " + File);
                 listSong(Title, Artist, Category, Time, File);
                 songList.setCellFactory(TextFieldListCell.forListView());
-                songList.getItems().setAll(Title + " | " + Artist + " | " + Category + " | " + Time + " | " + File);
+                songList.getItems().addAll(Title + " | " + Artist + " | " + Category + " | " + Time + " | " + File);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
