@@ -53,7 +53,7 @@ public class newSongController {
     private void saveSong() {
         System.out.println("save song: start");
         try (Connection connection = DatabaseConnection.getConn()) {
-            String sql = "INSERT INTO Songs (Title, Artist, Category, Time, file_path) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Songs1 (Title, Artist, Category, Time, file_path) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, titleField.getText());
                 statement.setString(2, artistField.getText());
