@@ -61,6 +61,7 @@ public class newSongController {
                 statement.setString(4, timeField.getText());
                 statement.setString(5, filePathField.getText());
 
+
                 statement.executeUpdate();
                 Stage stage = (Stage) btnSave.getScene().getWindow();
                 stage.close();
