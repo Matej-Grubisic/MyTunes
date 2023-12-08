@@ -42,6 +42,7 @@ public class Song {
     public int getArtist(){
         return artist;
     }
+    public String getArtistString(){return artistString;}
     public int getCategory(){
         return category;
     }
