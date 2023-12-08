@@ -1,6 +1,9 @@
 package dk.easv.gui;
 
+import dk.easv.be.Song;
 import dk.easv.bll.DatabaseConnection;
+import dk.easv.dal.ArtistDAO;
+import dk.easv.dal.SongDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,38 +13,28 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import static jdk.jfr.consumer.EventStream.openFile;
+import java.sql.*;
+import java.util.HashMap;
 
 public class newSongController {
     private final Desktop desktop = Desktop.getDesktop();
 
-
     public MenuButton btnDrop;
-    @FXML
-    private Button btnClose;
+
     @FXML
     private Button btnSave;
-    @FXML
-    private Button btnChoose;
+
     @FXML
     private TextField titleField;
 
     @FXML
     private TextField artistField;
 
-    @FXML
-    private TextField categoryField;
+
 
     @FXML
     private TextField timeField;
@@ -49,26 +42,28 @@ public class newSongController {
     @FXML
     private TextField filePathField;
 
+    private final SongDAO SongDAO = new SongDAO();
+    private final ArtistDAO ArtistDAO = new ArtistDAO();
+
     @FXML
     private void saveSong() {
-        System.out.println("save song: start");
-        try (Connection connection = DatabaseConnection.getConn()) {
-            String sql = "INSERT INTO Songs1 (Title, Artist, Category, Time, file_path) VALUES (?, ?, ?, ?, ?)";
-            try (PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, titleField.getText());
-                statement.setString(2, artistField.getText());
-                statement.setString(3, btnDrop.getText());
-                statement.setString(4, timeField.getText());
-                statement.setString(5, filePathField.getText());
-
-
-                statement.executeUpdate();
-                Stage stage = (Stage) btnSave.getScene().getWindow();
-                stage.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        String title = titleField.getText();
+        String artist = artistField.getText();
+        int idArtist;
+        HashMap<String, Integer> artists = ArtistDAO.getArtist();
+        while(ArtistDAO.checkArtist(artist, artists) < 0){
+            ArtistDAO.createArtist(artist);
+            artists = ArtistDAO.getArtist();
         }
+        idArtist = ArtistDAO.checkArtist(artist, artists);
+        int category = getCategory(btnDrop.getText());
+        String time = timeField.getText();
+        String filepath = filePathField.getText();
+        Song s = new Song(title,idArtist,category,time,filepath);
+        SongDAO.createSong(s);
+        Stage stage = (Stage) btnSave.getScene().getWindow();
+        stage.close();
+        System.out.println(s);
     }
 
     @FXML
@@ -78,28 +73,14 @@ public class newSongController {
     }
 
     @FXML
-    private void getPop(ActionEvent actionEvent) {
-        System.out.println("Pop");
-        btnDrop.setText("Pop");
-    }
-
-    @FXML
-    private void getHop(ActionEvent actionEvent) {
-        System.out.println("Hop");
-        btnDrop.setText("Hip Hop");
-    }
-
-    @FXML
-    private void getRap(ActionEvent actionEvent) {
-        System.out.println("Rap");
-        btnDrop.setText("Rap");
-    }
-
-    @FXML
-    private void getRock(ActionEvent actionEvent) {
-        System.out.println("Rock");
-        btnDrop.setText("Rock");
-
+    private int getCategory(String category){
+        return switch (category) {
+            case "Pop" -> 1;
+            case "Hip Hop" -> 2;
+            case "Rap" -> 3;
+            case "Rock" -> 4;
+            case null, default -> 0;
+        };
     }
 
     @FXML
@@ -126,5 +107,19 @@ public class newSongController {
         );
     }
 
+    public void getPop(ActionEvent actionEvent) {
+        btnDrop.setText("Pop");
+    }
 
+    public void getHop(ActionEvent actionEvent) {
+        btnDrop.setText("Hip Hop");
+    }
+
+    public void getRap(ActionEvent actionEvent) {
+        btnDrop.setText("Rap");
+    }
+
+    public void getRock(ActionEvent actionEvent) {
+        btnDrop.setText("Rock");
+    }
 }

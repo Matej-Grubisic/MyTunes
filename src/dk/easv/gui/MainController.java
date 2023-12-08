@@ -1,6 +1,7 @@
 package dk.easv.gui;
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
+import dk.easv.be.Song;
+import dk.easv.dal.ArtistDAO;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,15 +9,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashMap;
+import java.util.List;
 
 import static dk.easv.bll.DatabaseConnection.getConn;
 
@@ -30,37 +31,47 @@ public class MainController {
     public Button btnPlaylistE;
     public Button btnSongE;
     public ListView songList;
-    public TableView tablePlaylist;
-    public TableColumn title;
-    public TableColumn artist;
-    public TableColumn time;
+    public TableView<Song> tableSong;
+    public TableColumn<Song,String> colTitle;
+    public TableColumn<Song,String> colArtist;
+    public TableColumn<Song, String> colTime;
+    public TableColumn<Song, Integer> colCategory;
+    public TableColumn<Song, String> colFile;
+
     @FXML
     private Button btnSongN;
+
+    private final ArtistDAO ArtistDAO = new ArtistDAO();
 
     @FXML
     private void initialize(){
         try(Connection con = getConn())
         {
-            String sql = "SELECT * FROM Songs ORDER BY SongID";
+            String sql = "SELECT * FROM Songs1 ORDER BY IDSong";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
-                int id = rs.getInt("SongID");
-                String Title = rs.getString("Title");
-                String Artist = rs.getString("Artist");
-                String Category = rs.getString("Category");
+                int id = rs.getInt("IDSong");
+                String Title = rs.getString("Name");
+                int Artist = rs.getInt("IDArtist");
+                int Category = rs.getInt("IDCategory");
                 String Time = rs.getString("Time");
-                String File = rs.getString("file_path");
+                String File = rs.getString("FilePath");
                 lblMain.setText(Title + " " + "is now playing");
-                System.out.println(id + ", "+ Title + ", " + Artist + ", " + Category + ", " + Time + ", " + File);
-                listSong(Title, Artist, Category, Time, File);
-                songList.setCellFactory(TextFieldListCell.forListView());
-                songList.getItems().addAll(Title + " | " + Artist + " | " + Category + " | " + Time + " | " + File);
+                //System.out.println(id + ", "+ Title + ", " + Artist + ", " + Category + ", " + Time + ", " + File);
+                //something here its 5 am I cant be bothered.
+                System.out.print(ArtistDAO.getArtist1() + ", " + ArtistDAO.getArtist1().get(Artist) + '\n');
+                Song s = new Song(Title,ArtistDAO.getArtist1().get(Artist),Category);
+                colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+                colArtist.setCellValueFactory(new PropertyValueFactory<>("Artist"));
+                colCategory.setCellValueFactory(new PropertyValueFactory<>("Category"));
+                tableSong.getItems().add(s);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 
     @FXML
     private void newSong(ActionEvent actionEvent) throws IOException {
@@ -111,12 +122,5 @@ public class MainController {
         addStage.setTitle("Edit Playlist");
         addStage.show();
     }
-
-    @FXML
-    private void listSong(String Title, String Artist, String Category, String Time, String File){
-        //songList.setEditable(true);
-
-    }
-
 
 }
