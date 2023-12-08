@@ -14,17 +14,23 @@
    <children>
       <VBox layoutX="33.0" layoutY="161.0" prefHeight="282.0" prefWidth="179.0">
          <children>
-            <TableView fx:id="tablePlaylist" prefHeight="291.0" prefWidth="179.0">
+            <TableView fx:id="tablePlaylist1" prefHeight="282.0" prefWidth="226.0">
               <columns>
-                <TableColumn fx:id="title" prefWidth="61.600006103515625" text="Title" />
-                <TableColumn fx:id="artist" prefWidth="53.59998321533203" text="Artist" />
-                  <TableColumn fx:id="time" prefWidth="63.199981689453125" text="Time" />
+                <TableColumn fx:id="colTitle1" prefWidth="57.600006103515625" text="Title" />
+                <TableColumn fx:id="colArtist1" prefWidth="52.799964904785156" text="Artist" />
+                  <TableColumn fx:id="colCategory1" prefWidth="67.19999999999999" text="Category" />
               </columns>
             </TableView>
          </children></VBox>
       <VBox layoutX="474.0" layoutY="161.0" prefHeight="282.0" prefWidth="322.0">
          <children>
-            <ListView fx:id="songList" prefHeight="282.0" prefWidth="179.0" />
+            <TableView fx:id="tableSong" prefHeight="282.0" prefWidth="226.0">
+               <columns>
+                  <TableColumn fx:id="colTitle" prefWidth="111.19992065429688" text="Title" />
+                  <TableColumn fx:id="colArtist" prefWidth="105.60003662109375" text="Artist" />
+                  <TableColumn fx:id="colCategory" prefWidth="104.79998779296875" text="Category" />
+               </columns>
+            </TableView>
          </children></VBox>
       <ListView layoutX="250.0" layoutY="161.0" prefHeight="282.0" prefWidth="179.0" />
       <Button fx:id="btnPlaylistN" layoutX="28.0" layoutY="467.0" mnemonicParsing="false" onAction="#newPlaylist" text="New" />
