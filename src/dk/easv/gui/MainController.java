@@ -60,10 +60,11 @@ public class MainController {
                 lblMain.setText(Title + " " + "is now playing");
                 //System.out.println(id + ", "+ Title + ", " + Artist + ", " + Category + ", " + Time + ", " + File);
                 //something here its 5 am I cant be bothered.
-                System.out.print(ArtistDAO.getArtist1() + ", " + ArtistDAO.getArtist1().get(Artist) + '\n');
-                Song s = new Song(Title,ArtistDAO.getArtist1().get(Artist),Category);
+                System.out.print(ArtistDAO.getArtist1() + ", " + ArtistDAO.getArtist1().get(Artist) + ", " + Artist+ '\n');
+                String artist5 = ArtistDAO.getArtist1().get(Artist);
+                Song s = new Song(Title,artist5,Category);
                 colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
-                colArtist.setCellValueFactory(new PropertyValueFactory<>("Artist"));
+                colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));
                 colCategory.setCellValueFactory(new PropertyValueFactory<>("Category"));
                 tableSong.getItems().add(s);
             }
