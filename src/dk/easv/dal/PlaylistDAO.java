@@ -4,7 +4,7 @@ import dk.easv.be.Playlist;
 import dk.easv.bll.DatabaseConnection;
 
 import java.sql.*;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistDAO implements IPlaylistDAO{
@@ -40,6 +40,16 @@ public class PlaylistDAO implements IPlaylistDAO{
 
     @Override
     public void updatePlaylist(Playlist pLaylist) {
+        try(Connection con = DatabaseConnection.getConn())
+        {
+            String sql = "UPDATE Playlist SET IDPlaylist=?, PlaylistName=? WHERE id=?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, pLaylist.getPlaylistName());
+            pstmt.setInt(2, pLaylist.getId());
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -58,7 +68,23 @@ public class PlaylistDAO implements IPlaylistDAO{
 
     @Override
     public List<Playlist> getAllPlaylists() {
-        return null;
+        List<Playlist> playlistList = new ArrayList<>();
+        try(Connection con = DatabaseConnection.getConn())
+        {
+            String sql = "SELECT * FROM Playlist";
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next()){
+                int id = rs.getInt("IDPlaylist");
+                String playlistName = rs.getString("PlaylistName");
+                Playlist playlist = new Playlist(id,playlistName);
+                playlistList.add(playlist);
+            }
+            return playlistList;
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

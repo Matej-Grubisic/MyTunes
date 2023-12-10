@@ -1,5 +1,6 @@
 package dk.easv.gui;
 import dk.easv.be.Song;
+import dk.easv.be.Playlist;
 import dk.easv.dal.ArtistDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
