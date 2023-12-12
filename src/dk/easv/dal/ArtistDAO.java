@@ -27,20 +27,19 @@ public class ArtistDAO implements IArtistDAO{
     }
 
     @Override
-    public HashMap<Integer, String> getArtist1(){
+    public String getArtist1(int ArtistId){
         try (Connection connection1 = DatabaseConnection.getConn()) {
-            String sql = "SELECT * FROM Artist1";
-            Statement stmt = connection1.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            HashMap<Integer, String> artists = new HashMap<Integer, String>();
+            String sql = "SELECT * FROM Artist1 WHERE IDArtist = ?";
+            PreparedStatement pstmt = connection1.prepareStatement(sql);
+            pstmt.setInt(1, ArtistId);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                int id = rs.getInt("IDArtist");
+                //System.out.println("a");
+                //int id = rs.getInt("IDArtist");
                 String name = rs.getString("ArtistName");
-                artists = new HashMap<Integer, String>();
-                artists.put(id, name);
+                return name;
             }
-            return artists;
-            //return persons;
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
