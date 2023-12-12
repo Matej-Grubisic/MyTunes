@@ -6,8 +6,8 @@
 <AnchorPane prefHeight="144.0" prefWidth="370.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.gui.newPlaylistController">
    <children>
       <Label layoutX="74.0" layoutY="64.0" text="Name:" />
-      <TextField id="playlistNameField"  layoutX="111.0" layoutY="59.0" />
-      <Button id="cancelButton" layoutX="235.0" layoutY="95.0" mnemonicParsing="false" onAction="#closeWin" text="Cancel" />
-      <Button id="saveButton" layoutX="304.0" layoutY="95.0" mnemonicParsing="false" onAction="#savePlaylist" text="Save"/>
+      <TextField fx:id="playlistNameField"  layoutX="111.0" layoutY="59.0" />
+      <Button fx:id="cancelButton" layoutX="235.0" layoutY="95.0" mnemonicParsing="false" onAction="#closeWin" text="Cancel" />
+      <Button fx:id="saveButton" layoutX="304.0" layoutY="95.0" mnemonicParsing="false" onAction="#savePlaylist" text="Save"/>
    </children>
 </AnchorPane>
