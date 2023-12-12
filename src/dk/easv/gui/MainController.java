@@ -1,9 +1,6 @@
 package dk.easv.gui;
 import dk.easv.be.Song;
-import dk.easv.be.Playlist;
 import dk.easv.dal.ArtistDAO;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,14 +8,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldListCell;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import static dk.easv.bll.DatabaseConnection.getConn;
 
@@ -36,7 +29,7 @@ public class MainController {
     public TableColumn<Song,String> colTitle;
     public TableColumn<Song,String> colArtist;
     public TableColumn<Song, String> colTime;
-    public TableColumn<Song, Integer> colCategory;
+    public TableColumn<Song, String> colCategory;
     public TableColumn<Song, String> colFile;
 
     @FXML
@@ -58,15 +51,15 @@ public class MainController {
                 int Category = rs.getInt("IDCategory");
                 String Time = rs.getString("Time");
                 String File = rs.getString("FilePath");
-                lblMain.setText(Title + " " + "is now playing");
-                //System.out.println(id + ", "+ Title + ", " + Artist + ", " + Category + ", " + Time + ", " + File);
-                //something here its 5 am I cant be bothered.
                 System.out.print(ArtistDAO.getArtist1(Artist) + ", " + Artist+ '\n');
                 String artist5 = ArtistDAO.getArtist1(Artist);
-                Song s = new Song(Title,artist5,Category);
+                String categoryName = getCategoryName(Category);
+                System.out.println("Category:" + Category);
+                System.out.println("Category name:"+categoryName);
+                Song s = new Song(Title,artist5,categoryName);
                 colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
                 colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));
-                colCategory.setCellValueFactory(new PropertyValueFactory<>("Category"));
+                colCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryName"));
                 tableSong.getItems().add(s);
             }
         } catch (SQLException e) {
@@ -125,4 +118,13 @@ public class MainController {
         addStage.show();
     }
 
+    private String getCategoryName(int categoryID){
+        return switch (categoryID) {
+            case 1 -> "Pop";
+            case 2 -> "Hip Hop";
+            case 3 -> "Rap";
+            case 4 -> "Rock";
+            default -> "None";
+        };
+    }
 }

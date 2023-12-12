@@ -1,6 +1,7 @@
 package dk.easv.be;
 
 public class Song {
+    private String categoryName;
     private int id=-1;
     private String title;
     private int artist;
@@ -26,11 +27,20 @@ public class Song {
         this.filepath = filepath;
     }
 
-    public Song(String title, String artistString, int category){
+    public Song(String title, String artistString, String categoryName){
         this.title = title;
         this.artistString = artistString;
-        this.category = category;
+        this.categoryName = categoryName;
     }
+
+    /*public Song(String title, int artist, String categorytest, String time, String filepath) {
+        this.title = title;
+        this.title = title;
+        this.artist = artist;
+        this.categorytest = categorytest;
+        this.time = time;
+        this.filepath = filepath;
+    }*/
 
     public int getId() {
         return id;
@@ -43,6 +53,9 @@ public class Song {
         return artist;
     }
     public String getArtistString(){return artistString;}
+
+    public String getCategoryName(){return categoryName;}
+
     public int getCategory(){
         return category;
     }

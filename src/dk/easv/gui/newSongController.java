@@ -1,7 +1,6 @@
 package dk.easv.gui;
 
 import dk.easv.be.Song;
-import dk.easv.bll.DatabaseConnection;
 import dk.easv.dal.ArtistDAO;
 import dk.easv.dal.SongDAO;
 import javafx.event.ActionEvent;
@@ -17,7 +16,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
 import java.util.HashMap;
 
 public class newSongController {
@@ -56,7 +54,8 @@ public class newSongController {
             artists = ArtistDAO.getArtist();
         }
         idArtist = ArtistDAO.checkArtist(artist, artists);
-        int category = getCategory(btnDrop.getText());
+        int category = getCategoryID(btnDrop.getText());
+        String categorytest = btnDrop.getText();
         String time = timeField.getText();
         String filepath = filePathField.getText();
         Song s = new Song(title,idArtist,category,time,filepath);
@@ -73,7 +72,7 @@ public class newSongController {
     }
 
     @FXML
-    private int getCategory(String category){
+    private int getCategoryID(String category){
         return switch (category) {
             case "Pop" -> 1;
             case "Hip Hop" -> 2;
@@ -82,6 +81,11 @@ public class newSongController {
             case null, default -> 0;
         };
     }
+
+
+
+
+
 
     @FXML
     private void chooseFile(ActionEvent actionEvent) throws UnsupportedAudioFileException, IOException {
