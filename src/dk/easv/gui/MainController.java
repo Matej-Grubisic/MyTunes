@@ -1,6 +1,7 @@
 package dk.easv.gui;
 import dk.easv.be.Song;
 import dk.easv.dal.ArtistDAO;
+import dk.easv.dal.SongDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,26 +17,17 @@ import java.sql.*;
 import static dk.easv.bll.DatabaseConnection.getConn;
 
 public class MainController {
-
-
-
-
     public Label lblMain;
     public Button btnPlaylistN;
     public Button btnPlaylistE;
     public Button btnSongE;
-    public ListView songList;
     public TableView<Song> tableSong;
     public TableColumn<Song,String> colTitle;
     public TableColumn<Song,String> colArtist;
-    public TableColumn<Song, String> colTime;
     public TableColumn<Song, String> colCategory;
-    public TableColumn<Song, String> colFile;
-
-    @FXML
-    private Button btnSongN;
-
+    public TableColumn<Song, Integer> IDcol;
     private final ArtistDAO ArtistDAO = new ArtistDAO();
+    private final SongDAO SongDAO = new SongDAO();
 
     @FXML
     private void initialize(){
@@ -45,21 +37,18 @@ public class MainController {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next()){
-                int id = rs.getInt("IDSong");
+                Integer id = rs.getInt("IDSong");
+
                 String Title = rs.getString("Name");
                 int Artist = rs.getInt("IDArtist");
                 int Category = rs.getInt("IDCategory");
-                String Time = rs.getString("Time");
-                String File = rs.getString("FilePath");
-                System.out.print(ArtistDAO.getArtist1(Artist) + ", " + Artist+ '\n');
                 String artist5 = ArtistDAO.getArtist1(Artist);
                 String categoryName = getCategoryName(Category);
-                System.out.println("Category:" + Category);
-                System.out.println("Category name:"+categoryName);
-                Song s = new Song(Title,artist5,categoryName);
+                Song s = new Song(Title,artist5,categoryName, id);
                 colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
                 colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));
                 colCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryName"));
+                IDcol.setCellValueFactory(new PropertyValueFactory<>("Id"));
                 tableSong.getItems().add(s);
             }
         } catch (SQLException e) {
@@ -92,6 +81,16 @@ public class MainController {
         addStage.setScene(new Scene(root));
         addStage.setTitle("Edit Song");
         addStage.show();
+    }
+
+    @FXML
+    private void deleteSong(ActionEvent actionEvent) throws IOException{
+        Song s = tableSong.getSelectionModel().getSelectedItem();
+        int id = s.getId();
+        System.out.println(id);
+        SongDAO.deleteSong(id);
+        tableSong.setEditable(true);
+        tableSong.getItems().remove(s);
     }
 
     @FXML

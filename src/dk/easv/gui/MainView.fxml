@@ -26,9 +26,10 @@
          <children>
             <TableView fx:id="tableSong" prefHeight="282.0" prefWidth="226.0">
                <columns>
-                  <TableColumn fx:id="colTitle" prefWidth="111.19992065429688" text="Title" />
-                  <TableColumn fx:id="colArtist" prefWidth="105.60003662109375" text="Artist" />
-                  <TableColumn fx:id="colCategory" prefWidth="104.79998779296875" text="Category" />
+                  <TableColumn fx:id="colTitle" prefWidth="90.0" text="Title" />
+                  <TableColumn fx:id="colArtist" minWidth="0.0" prefWidth="90.0" text="Artist" />
+                  <TableColumn fx:id="colCategory" prefWidth="140.800048828125" text="Category" />
+                  <TableColumn fx:id="IDcol" minWidth="0.0" prefWidth="0.0" text="id" />
                </columns>
             </TableView>
          </children></VBox>
@@ -41,7 +42,7 @@
       <Button layoutX="380.0" layoutY="467.0" mnemonicParsing="false" text="Delete" />
       <Button fx:id="btnSongN" layoutX="490.0" layoutY="467.0" mnemonicParsing="false" onAction="#newSong" text="New" />
       <Button fx:id="btnSongE" layoutX="557.0" layoutY="467.0" mnemonicParsing="false" onAction="#editSong" text="Edit" />
-      <Button layoutX="621.0" layoutY="467.0" mnemonicParsing="false" text="Delete" />
+      <Button layoutX="621.0" layoutY="467.0" mnemonicParsing="false" onAction="#deleteSong" text="Delete" />
       <Button layoutX="745.0" layoutY="467.0" mnemonicParsing="false" text="Close" />
       <Button layoutX="432.0" layoutY="161.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="29.0" text="..." />
       <Label layoutX="583.0" layoutY="29.0" text="Label" />

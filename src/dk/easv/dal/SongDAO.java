@@ -35,7 +35,7 @@ public class SongDAO implements ISongDAO {
     public void deleteSong(int id) {
         try(Connection con = DatabaseConnection.getConn())
         {
-            String sql = "DELETE FROM Songs1 WHERE id=?";
+            String sql = "DELETE FROM Songs1 WHERE IDsong=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             pstmt.execute();

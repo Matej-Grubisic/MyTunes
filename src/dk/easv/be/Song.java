@@ -27,10 +27,11 @@ public class Song {
         this.filepath = filepath;
     }
 
-    public Song(String title, String artistString, String categoryName){
+    public Song(String title, String artistString, String categoryName, int id) {
         this.title = title;
         this.artistString = artistString;
         this.categoryName = categoryName;
+        this.id = id;
     }
 
     /*public Song(String title, int artist, String categorytest, String time, String filepath) {
