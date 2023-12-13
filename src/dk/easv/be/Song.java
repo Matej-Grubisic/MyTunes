@@ -34,14 +34,20 @@ public class Song {
         this.id = id;
     }
 
-    /*public Song(String title, int artist, String categorytest, String time, String filepath) {
+    public Song(String title, String artistString, String categoryName, String filepath) {
         this.title = title;
+        this.artistString = artistString;
+        this.categoryName = categoryName;
+        this.filepath = filepath;
+    }
+
+    public Song(String title, int artist, int category, int sid) {
         this.title = title;
         this.artist = artist;
-        this.categorytest = categorytest;
-        this.time = time;
-        this.filepath = filepath;
-    }*/
+        this.category = category;
+        this.id = sid;
+    }
+
 
     public int getId() {
         return id;

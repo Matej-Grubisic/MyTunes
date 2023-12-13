@@ -12,14 +12,18 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class newSongController {
     private final Desktop desktop = Desktop.getDesktop();
+
+    private MainController MainController;
 
     public MenuButton btnDrop;
 
@@ -44,7 +48,7 @@ public class newSongController {
     private final ArtistDAO ArtistDAO = new ArtistDAO();
 
     @FXML
-    private void saveSong() {
+    public void saveSong() throws SQLException {
         String title = titleField.getText();
         String artist = artistField.getText();
         int idArtist;
@@ -55,18 +59,21 @@ public class newSongController {
         }
         idArtist = ArtistDAO.checkArtist(artist, artists);
         int category = getCategoryID(btnDrop.getText());
-        String categorytest = btnDrop.getText();
+        String categoryName = btnDrop.getText();
         String time = timeField.getText();
         String filepath = filePathField.getText();
         Song s = new Song(title,idArtist,category,time,filepath);
         SongDAO.createSong(s);
         Stage stage = (Stage) btnSave.getScene().getWindow();
         stage.close();
+        Song s1 = new Song(title,artist,categoryName,filepath);
+        MainController.setSongData(s1);
         System.out.println(s);
     }
 
     @FXML
     private void closeWin(ActionEvent actionEvent) {
+
         Stage stage = (Stage) btnSave.getScene().getWindow();
         stage.close();
     }
@@ -111,19 +118,28 @@ public class newSongController {
         );
     }
 
-    public void getPop(ActionEvent actionEvent) {
+    @FXML
+    private void getPop(ActionEvent actionEvent) {
         btnDrop.setText("Pop");
     }
 
-    public void getHop(ActionEvent actionEvent) {
+    @FXML
+    private void getHop(ActionEvent actionEvent) {
         btnDrop.setText("Hip Hop");
     }
 
-    public void getRap(ActionEvent actionEvent) {
+    @FXML
+    private void getRap(ActionEvent actionEvent) {
         btnDrop.setText("Rap");
     }
 
-    public void getRock(ActionEvent actionEvent) {
+    @FXML
+    private void getRock(ActionEvent actionEvent) {
         btnDrop.setText("Rock");
     }
+
+    public void setParentController(MainController MainController){
+        this.MainController = MainController;
+    }
+
 }

@@ -29,6 +29,8 @@ public class MainController {
     private final ArtistDAO ArtistDAO = new ArtistDAO();
     private final SongDAO SongDAO = new SongDAO();
 
+    private Song s;
+
     @FXML
     private void initialize(){
         try(Connection con = getConn())
@@ -65,6 +67,8 @@ public class MainController {
                 getClass().getResource("newsong.fxml")
         );
         Parent root = loader1.load();
+        newSongController newSongController = loader1.getController();
+        newSongController.setParentController(this);
         Stage addStage = new Stage();
         addStage.setScene(new Scene(root));
         addStage.setTitle("New Song");
@@ -125,5 +129,17 @@ public class MainController {
             case 4 -> "Rock";
             default -> "None";
         };
+    }
+
+    public void setSongData(Song s) throws SQLException {
+        String filepath = s.getFilepath();
+        String title = s.getTitle();
+        Song s1 = SongDAO.getSong1(filepath, title);
+        Song s2 = new Song(s1.getTitle(), s.getArtistString(), s.getCategoryName(), s1.getId());
+        colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));
+        colCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryName"));
+        IDcol.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        tableSong.getItems().add(s2);
     }
 }
