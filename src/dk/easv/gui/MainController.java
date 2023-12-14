@@ -1,6 +1,8 @@
 package dk.easv.gui;
+import dk.easv.be.Playlist;
 import dk.easv.be.Song;
 import dk.easv.dal.ArtistDAO;
+import dk.easv.dal.PlaylistDAO;
 import dk.easv.dal.SongDAO;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,10 +28,13 @@ public class MainController {
     public TableColumn<Song,String> colArtist;
     public TableColumn<Song, String> colCategory;
     public TableColumn<Song, Integer> IDcol;
+    public TableView <Playlist> tablePlaylist1;
     private final ArtistDAO ArtistDAO = new ArtistDAO();
     private final SongDAO SongDAO = new SongDAO();
+    private final PlaylistDAO PlaylistDAO = new PlaylistDAO();
 
     private Song s;
+    private Playlist playlist;
 
     @FXML
     private void initialize(){
@@ -120,7 +125,15 @@ public class MainController {
         addStage.setTitle("Edit Playlist");
         addStage.show();
     }
-
+    @FXML
+    private void deletePlaylist(ActionEvent actionEvent) throws IOException{
+        Playlist playlist = tablePlaylist1.getSelectionModel().getSelectedItem();
+        int id = playlist.getId();
+        System.out.println(id);
+        PlaylistDAO.deletePlaylist(id);
+        tablePlaylist1.setEditable(true);
+        tablePlaylist1.getItems().remove(playlist);
+    }
     private String getCategoryName(int categoryID){
         return switch (categoryID) {
             case 1 -> "Pop";
