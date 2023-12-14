@@ -13,7 +13,6 @@
         <Label layoutX="92.0" layoutY="69.0" prefHeight="18.0" prefWidth="41.0" text="Artist" />
         <Label layoutX="92.0" layoutY="107.0" text="Category" />
         <Label layoutX="92.0" layoutY="149.0" prefHeight="18.0" prefWidth="42.0" text="Time" />
-        <Label layoutX="92.0" layoutY="194.0" prefHeight="18.0" prefWidth="33.0" text="File" />
         <TextField fx:id="titleField" layoutX="158.0" layoutY="27.0"/>
         <TextField fx:id="artistField" layoutX="158.0" layoutY="65.0" />
 
