@@ -82,10 +82,17 @@ public class MainController {
 
     @FXML
     private void editSong(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader1 = new FXMLLoader(
-                getClass().getResource("newsong.fxml")
+        FXMLLoader loader2 = new FXMLLoader(
+                getClass().getResource("editsong.fxml")
         );
-        Parent root = loader1.load();
+        Parent root = loader2.load();
+        editSongController editSongController = loader2.getController();
+        Song s = tableSong.getSelectionModel().getSelectedItem();
+        editSongController.songID(s);
+        tableSong.setEditable(true);
+        tableSong.getItems().remove(s);
+        tableSong.setEditable(false);
+        editSongController.setParentController(this);
         Stage addStage = new Stage();
         addStage.setScene(new Scene(root));
         addStage.setTitle("Edit Song");
@@ -100,6 +107,7 @@ public class MainController {
         SongDAO.deleteSong(id);
         tableSong.setEditable(true);
         tableSong.getItems().remove(s);
+        tableSong.setEditable(false);
     }
 
     @FXML
@@ -148,6 +156,16 @@ public class MainController {
         String filepath = s.getFilepath();
         String title = s.getTitle();
         Song s1 = SongDAO.getSong1(filepath, title);
+        Song s2 = new Song(s1.getTitle(), s.getArtistString(), s.getCategoryName(), s1.getId());
+        colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));
+        colCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryName"));
+        IDcol.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        tableSong.getItems().add(s2);
+    }
+
+    public void setSongDataEdit(Song s) throws SQLException {
+        Song s1 = SongDAO.getSong(s.getId());
         Song s2 = new Song(s1.getTitle(), s.getArtistString(), s.getCategoryName(), s1.getId());
         colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));

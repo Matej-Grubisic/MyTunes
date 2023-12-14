@@ -17,7 +17,7 @@ public class SongDAO implements ISongDAO {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()){
-                int sid = rs.getInt("id");
+                int sid = rs.getInt("IDsong");
                 String title = rs.getString("Name");
                 String filepath = rs.getString("FilePath");
                 String time = rs.getString("Time");
@@ -71,14 +71,13 @@ public class SongDAO implements ISongDAO {
     public void updateSong(Song s) {
         try(Connection con = DatabaseConnection.getConn())
         {
-            String sql = "UPDATE Songs1 SET Name=?, FilePath=?, Time=?, IDArtist=?, IDCategory=? WHERE id=?";
+            String sql = "UPDATE Songs1 SET Name=?, Time=?, IDArtist=?, IDCategory=? WHERE IDsong=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, s.getTitle());
-            pstmt.setString(2, s.getFilepath());
-            pstmt.setString(3, s.getTime());
-            pstmt.setInt(4, s.getArtist());
-            pstmt.setInt(5, s.getCategory());
-            pstmt.setInt(6, s.getId());
+            pstmt.setString(2, s.getTime());
+            pstmt.setInt(3, s.getArtist());
+            pstmt.setInt(4, s.getCategory());
+            pstmt.setInt(5, s.getId());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
