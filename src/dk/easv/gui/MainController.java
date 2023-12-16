@@ -28,6 +28,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.Objects;
 
 import static dk.easv.bll.DatabaseConnection.getConn;
@@ -37,15 +40,24 @@ public class MainController {
     public Button btnPlaylistN;
     public Button btnPlaylistE;
     public Button btnSongE;
+    public ListView songList;
     public TableView<Song> tableSong;
     public TableColumn<Song,String> colTitle;
     public TableColumn<Song,String> colArtist;
     public TableColumn<Song, String> colCategory;
     public TableColumn<Song, Integer> IDcol;
-    public TableView <Playlist> tablePlaylist1;
-    private final ArtistDAO ArtistDAO = new ArtistDAO();
-    private final SongDAO SongDAO = new SongDAO();
+    // Playlist table
+    public TableView<Playlist> tablePlaylist1;
+    public TableColumn<Playlist, String> colTitle1;
+
+    public TextField songSearchI;
+    private Button btnSongN;
     private final PlaylistDAO PlaylistDAO = new PlaylistDAO();
+    private final ArtistDAO ArtistDAO = new ArtistDAO();
+    
+    private ArrayList<Song> mySongs = new ArrayList<>();
+
+    private final SongDAO SongDAO = new SongDAO();
     public Label labelPlaying;
     public Button forwardButton;
     public Button previousButton;
@@ -72,30 +84,73 @@ public class MainController {
 
     @FXML
     private void initialize(){
-        try(Connection con = getConn())
-        {
+        getSongsOrder();
+        setTable(mySongs);
+        playlistIni();
+    }
+    private void setTable(ArrayList<Song> songList){
+        colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));
+        colCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryName"));
+        IDcol.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        tableSong.getItems().clear();
+        for(Song val : songList ){
+            tableSong.getItems().add(val);
+        }
+    }
+
+    private void songFilter(String search){
+        List<Song> searchSongList = new ArrayList<>();
+        List<Song> filteredSongs = mySongs.stream()
+                .filter(song -> search == null || isSimilar(song.getTitle().toLowerCase(), search.toLowerCase()))
+                .collect(Collectors.toList());
+        ArrayList<Song> filteredArrayList = new ArrayList<>(filteredSongs);
+        setTable(filteredArrayList);
+    }
+
+    public void searchSong(ActionEvent actionEvent) {
+        songFilter(songSearchI.getText());
+    }
+
+    private boolean isSimilar(String str1, String str2) {
+        return str1.contains(str2);
+    }
+    private void getSongsOrder() {
+        try (Connection con = getConn()) {
             String sql = "SELECT * FROM Songs1 ORDER BY IDSong";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            while(rs.next()){
+            while (rs.next()) {
                 Integer id = rs.getInt("IDSong");
-
                 String Title = rs.getString("Name");
                 int Artist = rs.getInt("IDArtist");
                 int Category = rs.getInt("IDCategory");
+                String Time = rs.getString("Time");
+                String File = rs.getString("FilePath");
+                System.out.print(ArtistDAO.getArtist1(Artist) + ", " + Artist + '\n');
                 String artist5 = ArtistDAO.getArtist1(Artist);
                 String categoryName = getCategoryName(Category);
-                Song s = new Song(Title,artist5,categoryName, id);
-                colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
-                colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));
-                colCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryName"));
-                IDcol.setCellValueFactory(new PropertyValueFactory<>("Id"));
-                tableSong.getItems().add(s);
+                System.out.println("Category:" + Category);
+                System.out.println("Category name:" + categoryName);
+                Song s = new Song(Title, artist5, categoryName, id);
+                mySongs.add(s);
+
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+        @FXML
+        private void playlistIni() {
+            List<Playlist> allPlaylist = PlaylistDAO.getAllPlaylists();
+            colTitle1.setCellValueFactory(new PropertyValueFactory<>("PlaylistName"));
+
+            for(dk.easv.be.Playlist value : allPlaylist){
+                tablePlaylist1.getItems().add(value);
+            }
+        }
 
 
     @FXML

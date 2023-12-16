@@ -33,13 +33,13 @@ public class SongDAO implements ISongDAO {
 
     @Override
     public Song getSong1(String filepath, String title) throws SQLException {
-        try(Connection conn = DatabaseConnection.getConn()){
+        try (Connection conn = DatabaseConnection.getConn()) {
             String sql = "SELECT * FROM Songs1 WHERE FilePath=? AND Name=?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, filepath);
             pstmt.setString(2, title);
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 int sid = rs.getInt("IDsong");
                 String title1 = rs.getString("Name");
                 String file_path = rs.getString("FilePath");
@@ -47,7 +47,7 @@ public class SongDAO implements ISongDAO {
                 int artist = rs.getInt("IDArtist");
                 int category = rs.getInt("IDCategory");
 
-                Song s = new Song(title1,artist,category,sid);
+                Song s = new Song(title1, artist, category, sid);
                 return s;
             }
             return null;
