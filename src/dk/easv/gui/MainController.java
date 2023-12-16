@@ -92,6 +92,7 @@ public class MainController {
         colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));
         colCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryName"));
+        IDcol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         tableSong.getItems().clear();
         for(Song val : songList ){
             tableSong.getItems().add(val);
@@ -131,9 +132,9 @@ public class MainController {
                 String categoryName = getCategoryName(Category);
                 System.out.println("Category:" + Category);
                 System.out.println("Category name:" + categoryName);
-                Song s = new Song(Title, Artist, Category, Time, File);
+                Song s = new Song(Title, artist5, categoryName, id);
                 mySongs.add(s);
-                IDcol.setCellValueFactory(new PropertyValueFactory<>("Id"));
+
             }
         }
         catch (SQLException e) {
