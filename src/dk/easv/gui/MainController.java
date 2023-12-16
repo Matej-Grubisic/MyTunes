@@ -84,7 +84,7 @@ public class MainController {
 
     @FXML
     private void initialize(){
-        getSongs();
+        getSongsOrder();
         setTable(mySongs);
         playlistIni();
     }
@@ -115,7 +115,7 @@ public class MainController {
     private boolean isSimilar(String str1, String str2) {
         return str1.contains(str2);
     }
-    private void getSongs() {
+    private void getSongsOrder() {
         try (Connection con = getConn()) {
             String sql = "SELECT * FROM Songs1 ORDER BY IDSong";
             Statement stmt = con.createStatement();
