@@ -4,6 +4,8 @@ import dk.easv.be.Song;
 import dk.easv.dal.ArtistDAO;
 import dk.easv.dal.PlaylistDAO;
 import dk.easv.dal.SongDAO;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,13 +13,25 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import java.text.DecimalFormat;
+
+
+
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 import static dk.easv.bll.DatabaseConnection.getConn;
 
@@ -40,10 +54,33 @@ public class MainController {
     private Button btnSongN;
     private final PlaylistDAO PlaylistDAO = new PlaylistDAO();
     private final ArtistDAO ArtistDAO = new ArtistDAO();
-    private final SongDAO SongDAO = new SongDAO();
+    
     private ArrayList<Song> mySongs = new ArrayList<>();
 
+    private final SongDAO SongDAO = new SongDAO();
+    public Label labelPlaying;
+    public Button forwardButton;
+    public Button previousButton;
+    public Label totalDuration;
+    public Label currentDuration;
+    public ToggleButton pauseButton;
+    public ToggleButton playButton;
+    public Slider timeSlider;
+
+    private final ToggleGroup group = new ToggleGroup();
+
+    private MediaPlayer player;
+
+    private final DecimalFormat formatter = new DecimalFormat("00.00");
+    private Duration totalTime;
+
+    public Slider sliderBtn;
+    public Label lblSong;
+
     private Song s;
+    private Playlist playlist;
+
+    boolean status = false;
 
     @FXML
     private void initialize(){
@@ -133,10 +170,17 @@ public class MainController {
 
     @FXML
     private void editSong(ActionEvent actionEvent) throws IOException {
-        FXMLLoader loader1 = new FXMLLoader(
-                getClass().getResource("newsong.fxml")
+        FXMLLoader loader2 = new FXMLLoader(
+                getClass().getResource("editsong.fxml")
         );
-        Parent root = loader1.load();
+        Parent root = loader2.load();
+        editSongController editSongController = loader2.getController();
+        Song s = tableSong.getSelectionModel().getSelectedItem();
+        editSongController.songID(s);
+        tableSong.setEditable(true);
+        tableSong.getItems().remove(s);
+        tableSong.setEditable(false);
+        editSongController.setParentController(this);
         Stage addStage = new Stage();
         addStage.setScene(new Scene(root));
         addStage.setTitle("Edit Song");
@@ -151,6 +195,7 @@ public class MainController {
         SongDAO.deleteSong(id);
         tableSong.setEditable(true);
         tableSong.getItems().remove(s);
+        tableSong.setEditable(false);
     }
 
     @FXML
@@ -176,7 +221,15 @@ public class MainController {
         addStage.setTitle("Edit Playlist");
         addStage.show();
     }
-
+    @FXML
+    private void deletePlaylist(ActionEvent actionEvent) throws IOException{
+        Playlist playlist = tablePlaylist1.getSelectionModel().getSelectedItem();
+        int id = playlist.getId();
+        System.out.println(id);
+        PlaylistDAO.deletePlaylist(id);
+        tablePlaylist1.setEditable(true);
+        tablePlaylist1.getItems().remove(playlist);
+    }
     private String getCategoryName(int categoryID){
         return switch (categoryID) {
             case 1 -> "Pop";
@@ -198,4 +251,73 @@ public class MainController {
         IDcol.setCellValueFactory(new PropertyValueFactory<>("Id"));
         tableSong.getItems().add(s2);
     }
+
+    public void setSongDataEdit(Song s) throws SQLException {
+        Song s1 = SongDAO.getSong(s.getId());
+        Song s2 = new Song(s1.getTitle(), s.getArtistString(), s.getCategoryName(), s1.getId());
+        colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
+        colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));
+        colCategory.setCellValueFactory(new PropertyValueFactory<>("CategoryName"));
+        IDcol.setCellValueFactory(new PropertyValueFactory<>("Id"));
+        tableSong.getItems().add(s2);
+    }
+
+    public void playSong() throws SQLException, IOException {
+        Song s = tableSong.getSelectionModel().getSelectedItem();
+        Song s1 = SongDAO.getSong(s.getId());
+        String filepath = s1.getFilepath();
+        labelPlaying.setText(s.getTitle() + " is playing");
+        tableSong.getItems();
+        onStartSong(filepath);
+
+    }
+
+    public void playNext(){
+
+    }
+
+    public void playPrevious(){
+
+    }
+
+    private void onStartSong(String filepath){
+        Media pick = new Media(new File(filepath).toURI().toString());
+        player = new MediaPlayer(pick);
+        player.play();
+        playButton.setSelected(true);
+        player.currentTimeProperty().addListener(new ChangeListener<Duration>() {
+            @Override
+            public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
+                currentDuration.setText(String.valueOf(formatter.format(newValue.toSeconds())));
+            }
+        });
+
+        player.setOnReady(() -> {
+            totalTime = player.getMedia().getDuration();
+            totalDuration.setText(" / " + String.valueOf(formatter.format(Math.floor(totalTime.toSeconds()))));
+        });
+
+        playButton.setToggleGroup(group);
+        pauseButton.setToggleGroup(group);
+
+        playButton.setOnAction(e -> {
+            play();
+        });
+
+        pauseButton.setOnAction(e -> {
+            pause();
+        });
+    }
+
+    private void play(){
+        player.play();
+        playButton.setSelected(true);
+    }
+
+    private void pause(){
+        player.pause();
+        playButton.setSelected(false);
+    }
+
+
 }

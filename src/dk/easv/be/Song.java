@@ -48,6 +48,14 @@ public class Song {
         this.id = sid;
     }
 
+    public Song(String title, int artist, int category, String time, int id) {
+        this.title = title;
+        this.artist = artist;
+        this.category = category;
+        this.time = time;
+        this.id = id;
+    }
+
 
     public int getId() {
         return id;
