@@ -8,6 +8,6 @@ public interface IPlaylistDAO {
     public Playlist getPlaylist(int id) throws SQLException;
     public void deletePlaylist(int id);
     public void updatePlaylist(Playlist pLaylist);
-    public void createPlaylist(Playlist playlist);
+    public int createPlaylist(String newName);
     public List<Playlist> getAllPlaylists();
 }
