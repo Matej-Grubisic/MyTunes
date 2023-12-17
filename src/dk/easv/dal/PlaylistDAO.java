@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistDAO implements IPlaylistDAO{
+
     @Override
     public Playlist getPlaylist(int id) throws SQLException {
         try(Connection conn = DatabaseConnection.getConn()){
@@ -29,7 +30,7 @@ public class PlaylistDAO implements IPlaylistDAO{
     public void deletePlaylist(int id) {
         try(Connection con = DatabaseConnection.getConn())
         {
-            String sql = "DELETE FROM Playlist WHERE id=?";
+            String sql = "DELETE FROM Playlist WHERE IDPlaylist=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             pstmt.execute();
@@ -54,13 +55,26 @@ public class PlaylistDAO implements IPlaylistDAO{
     }
 
     @Override
-    public void createPlaylist(Playlist playlist) {
+    public int createPlaylist(String newName) {
         try(Connection con = DatabaseConnection.getConn())
         {
             String sql = "INSERT INTO Playlist(PlaylistName) VALUES (?)";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, playlist.getPlaylistName());
-            pstmt.execute();
+            PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, newName);;
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("Creating playlist failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+                else {
+                    throw new SQLException("Creating playlist failed, no ID obtained.");
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

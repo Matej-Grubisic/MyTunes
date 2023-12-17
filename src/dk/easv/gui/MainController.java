@@ -4,6 +4,9 @@ import dk.easv.be.Song;
 import dk.easv.dal.ArtistDAO;
 import dk.easv.dal.PlaylistDAO;
 import dk.easv.dal.SongDAO;
+import dk.easv.gui.otherControllers.EditSongController;
+import dk.easv.gui.otherControllers.NewSongController;
+import dk.easv.gui.sharedClasses.PlaylistTable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -21,21 +24,19 @@ import javafx.util.Duration;
 import java.text.DecimalFormat;
 
 
-
-import javax.sound.sampled.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Objects;
 
 import static dk.easv.bll.DatabaseConnection.getConn;
 
 public class MainController {
+    private PlaylistTable playlistTableSingle = PlaylistTable.getInstance();
+
+
     public Label lblMain;
     public Button btnPlaylistN;
     public Button btnPlaylistE;
@@ -87,6 +88,8 @@ public class MainController {
         getSongsOrder();
         setTable(mySongs);
         playlistIni();
+
+        playlistTableSingle.setTable(tablePlaylist1);
     }
     private void setTable(ArrayList<Song> songList){
         colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
@@ -158,10 +161,10 @@ public class MainController {
 
         System.out.println("Weeeeeeeee!");
         FXMLLoader loader1 = new FXMLLoader(
-                getClass().getResource("newsong.fxml")
+                getClass().getResource("fxmlFiles/NewSong.fxml")
         );
         Parent root = loader1.load();
-        newSongController newSongController = loader1.getController();
+        NewSongController newSongController = loader1.getController();
         newSongController.setParentController(this);
         Stage addStage = new Stage();
         addStage.setScene(new Scene(root));
@@ -172,10 +175,10 @@ public class MainController {
     @FXML
     private void editSong(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader2 = new FXMLLoader(
-                getClass().getResource("editsong.fxml")
+                getClass().getResource("fxmlFiles/EditSong.fxml")
         );
         Parent root = loader2.load();
-        editSongController editSongController = loader2.getController();
+        EditSongController editSongController = loader2.getController();
         Song s = tableSong.getSelectionModel().getSelectedItem();
         editSongController.songID(s);
         tableSong.setEditable(true);
@@ -202,7 +205,7 @@ public class MainController {
     @FXML
     private void newPlaylist(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader2 = new FXMLLoader(
-                getClass().getResource("newplaylist.fxml")
+                getClass().getResource("fxmlFiles/NewPlaylist.fxml")
         );
         Parent root = loader2.load();
         Stage addStage = new Stage();
@@ -214,7 +217,7 @@ public class MainController {
     @FXML
     private void editPlaylist(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader2 = new FXMLLoader(
-                getClass().getResource("newplaylist.fxml")
+                getClass().getResource("fxmlFiles/NewPlaylist.fxml")
         );
         Parent root = loader2.load();
         Stage addStage = new Stage();
@@ -222,6 +225,9 @@ public class MainController {
         addStage.setTitle("Edit Playlist");
         addStage.show();
     }
+
+
+
     @FXML
     private void deletePlaylist(ActionEvent actionEvent) throws IOException{
         Playlist playlist = tablePlaylist1.getSelectionModel().getSelectedItem();
