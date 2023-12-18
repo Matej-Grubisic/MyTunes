@@ -9,8 +9,10 @@ import dk.easv.gui.otherControllers.EditSongController;
 import dk.easv.gui.otherControllers.NewPlaylistController;
 import dk.easv.gui.otherControllers.NewSongController;
 import dk.easv.gui.sharedClasses.PlaylistTable;
+import dk.easv.gui.sharedClasses.PlaylistSongTable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,19 +33,21 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static dk.easv.bll.DatabaseConnection.getConn;
 
 public class MainController {
     private PlaylistTable playlistTableSingle = PlaylistTable.getInstance();
+    private PlaylistSongTable playlistSongTable = PlaylistSongTable.getInstance();
 
+    public ListView playlistSongListView;
 
-    public Label lblMain;
     public Button btnPlaylistN;
     public Button btnPlaylistE;
     public Button btnSongE;
-    public ListView songList;
+
     public TableView<Song> tableSong;
     public TableColumn<Song,String> colTitle;
     public TableColumn<Song,String> colArtist;
@@ -54,12 +58,11 @@ public class MainController {
     public TableColumn<Playlist, String> colTitle1;
 
     public TextField songSearchI;
-    @FXML
-    private Button btnSongN;
     private final PlaylistDAO PlaylistDAO = new PlaylistDAO();
     private final ArtistDAO ArtistDAO = new ArtistDAO();
     
     private ArrayList<Song> mySongs = new ArrayList<>();
+    private ArrayList<Playlist> myPlaylist = new ArrayList<>();
 
     private final SongDAO SongDAO = new SongDAO();
     public Label labelPlaying;
@@ -69,7 +72,6 @@ public class MainController {
     public Label currentDuration;
     public ToggleButton pauseButton;
     public ToggleButton playButton;
-    public Slider timeSlider;
 
     private final ToggleGroup group = new ToggleGroup();
 
@@ -78,22 +80,20 @@ public class MainController {
     private final DecimalFormat formatter = new DecimalFormat("00.00");
     private Duration totalTime;
 
-    public Slider sliderBtn;
-    public Label lblSong;
 
-    private Song s;
-    private Playlist playlist;
-
-    boolean status = false;
 
     @FXML
     private void initialize(){
+        playlistSongTable.setTable(playlistSongListView);
+        playlistTableSingle.setTable(tablePlaylist1);
+
         getSongsOrder();
         setTable(mySongs);
         playlistIni();
-
-        playlistTableSingle.setTable(tablePlaylist1);
     }
+
+
+
     private void setTable(ArrayList<Song> songList){
         colTitle.setCellValueFactory(new PropertyValueFactory<>("Title"));
         colArtist.setCellValueFactory(new PropertyValueFactory<>("ArtistString"));
@@ -118,9 +118,11 @@ public class MainController {
         songFilter(songSearchI.getText());
     }
 
+
     private boolean isSimilar(String str1, String str2) {
         return str1.contains(str2);
     }
+
     private void getSongsOrder() {
         try (Connection con = getConn()) {
             String sql = "SELECT * FROM Songs1 ORDER BY IDSong";
@@ -153,10 +155,52 @@ public class MainController {
             List<Playlist> allPlaylist = PlaylistDAO.getAllPlaylists();
             colTitle1.setCellValueFactory(new PropertyValueFactory<>("PlaylistName"));
 
-            for(dk.easv.be.Playlist value : allPlaylist){
-                tablePlaylist1.getItems().add(value);
+
+            int index = 0;
+            for(Playlist value : allPlaylist){
+                ArrayList<Integer> songIds = PlaylistDAO.getSongToPlaylist(value.getId());
+                List<Song> playlistSongs = new ArrayList<>();  // Create a list to collect songs
+
+                for (Integer intVal : songIds) {
+                    List<Song> songs = mySongs.stream()
+                            .filter(song -> song.getId() == intVal)
+                            .toList();
+
+                    playlistSongs.addAll(songs);  // Add songs to the playlistSongs list
+                }
+                value.setSongList(playlistSongs);
+
+                playlistTableSingle.getPlaylistTable().getItems().add(value);
+                myPlaylist.add(value);
+
+                if(index == 0){
+                    showPlaylistSongTable(value);
+                }
+
+                index++;
+            }
+
+
+            playlistTableSingle.getPlaylistTable().setRowFactory(tv -> {
+                TableRow<Playlist> row = new TableRow<>();
+                row.setOnMouseClicked(event -> {
+                    if (!row.isEmpty()) {
+                        Playlist selectedPlaylist = row.getItem();
+                        showPlaylistSongTable(selectedPlaylist);
+                    }
+                });
+                return row;
+            });
+        }
+
+    private void showPlaylistSongTable(Playlist selectedPlaylist){
+        playlistSongTable.getPlaylistSongTable().getItems().clear();
+        if(selectedPlaylist.getSongList() != null){
+            for(Song value : selectedPlaylist.getSongList()){
+                playlistSongTable.getPlaylistSongTable().getItems().add(value.getTitle());
             }
         }
+    }
 
 
     @FXML
@@ -248,13 +292,15 @@ public class MainController {
 
     @FXML
     private void deletePlaylist(ActionEvent actionEvent) throws IOException{
-        Playlist playlist = tablePlaylist1.getSelectionModel().getSelectedItem();
+        Playlist playlist = playlistTableSingle.getPlaylistTable().getSelectionModel().getSelectedItem();
         int id = playlist.getId();
         System.out.println(id);
         PlaylistDAO.deletePlaylist(id);
-        tablePlaylist1.setEditable(true);
-        tablePlaylist1.getItems().remove(playlist);
+        playlistTableSingle.getPlaylistTable().setEditable(true);
+        playlistTableSingle.getPlaylistTable().getItems().remove(playlist);
+        playlistSongTable.getPlaylistSongTable().getItems().clear();
     }
+
     private String getCategoryName(int categoryID){
         return switch (categoryID) {
             case 1 -> "Pop";
@@ -341,6 +387,20 @@ public class MainController {
     private void pause(){
         player.pause();
         playButton.setSelected(false);
+    }
+
+
+    public void addSongToPlaylist(ActionEvent actionEvent) {
+        Song selectedSong = tableSong.getSelectionModel().getSelectedItem();
+        Playlist selectedPlaylist = playlistTableSingle.getPlaylistTable().getSelectionModel().getSelectedItem();
+
+        if(selectedSong != null && selectedPlaylist != null){
+            // Add to the list
+           playlistSongTable.getPlaylistSongTable().getItems().add(selectedSong.getTitle());
+            // Add to the DB
+           PlaylistDAO.addSongToPlaylist(selectedSong, selectedPlaylist);
+            // Add to the playlist Array
+        }
     }
 
 
