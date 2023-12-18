@@ -1,6 +1,7 @@
 package dk.easv.gui.otherControllers;
 import dk.easv.be.Playlist;
 import dk.easv.dal.PlaylistDAO;
+import dk.easv.gui.MainController;
 import dk.easv.gui.sharedClasses.PlaylistTable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +22,9 @@ public class NewPlaylistController {
     
     private final PlaylistDAO PlaylistDAO = new PlaylistDAO();
 
+    private Playlist p;
+    private MainController MainController;
+
     @FXML
     private void savePlaylist() {
         String playlistName = playlistNameField.getText();
@@ -38,4 +42,5 @@ public class NewPlaylistController {
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
     }
+
 }

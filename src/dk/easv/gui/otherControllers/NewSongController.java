@@ -1,5 +1,6 @@
 package dk.easv.gui.otherControllers;
 
+import dk.easv.be.Playlist;
 import dk.easv.be.Song;
 import dk.easv.dal.ArtistDAO;
 import dk.easv.dal.SongDAO;
@@ -142,5 +143,4 @@ public class NewSongController {
     public void setParentController(MainController MainController){
         this.MainController = MainController;
     }
-
 }

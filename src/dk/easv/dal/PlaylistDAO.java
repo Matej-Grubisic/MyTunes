@@ -10,11 +10,27 @@ import java.util.List;
 public class PlaylistDAO implements IPlaylistDAO{
 
     @Override
-    public Playlist getPlaylist(int id) throws SQLException {
+    public Playlist getPlaylistfromID(int id) throws SQLException {
         try(Connection conn = DatabaseConnection.getConn()){
-            String sql = "SELECT IDPlaylist, PlaylistName FROM Playlist WHERE id=?";
+            String sql = "SELECT IDPlaylist, PlaylistName FROM Playlist WHERE IDPlaylist=?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                int pid = rs.getInt("IDPlaylist");
+                String playlistName = rs.getString("PlaylistName");
+                Playlist playlist = new Playlist(pid, playlistName);
+                return playlist;
+            }
+            return null;
+        }
+    }
+    @Override
+    public Playlist getPlaylistfromName(String name) throws SQLException {
+        try(Connection conn = DatabaseConnection.getConn()){
+            String sql = "SELECT IDPlaylist, PlaylistName FROM Playlist WHERE PlaylistName=?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, name);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()){
                 int pid = rs.getInt("IDPlaylist");
@@ -40,13 +56,13 @@ public class PlaylistDAO implements IPlaylistDAO{
     }
 
     @Override
-    public void updatePlaylist(Playlist pLaylist) {
+    public void updatePlaylist(String name, int id) {
         try(Connection con = DatabaseConnection.getConn())
         {
-            String sql = "UPDATE Playlist SET IDPlaylist=?, PlaylistName=? WHERE id=?";
+            String sql = "UPDATE Playlist SET PlaylistName=? WHERE IDPlaylist=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, pLaylist.getPlaylistName());
-            pstmt.setInt(2, pLaylist.getId());
+            pstmt.setString(1, name);
+            pstmt.setInt(2, id);
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);

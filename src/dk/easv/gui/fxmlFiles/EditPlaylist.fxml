@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="144.0" prefWidth="370.0" style="-fx-background-color: #98D7FF;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.gui.otherControllers.EditPlaylistController">
+    <children>
+        <Label layoutX="62.0" layoutY="46.0" text="Name:">
+            <font>
+                <Font name="Al Bayan Plain" size="13.0" />
+            </font></Label>
+        <TextField fx:id="playlistNameField" layoutX="111.0" layoutY="46.0" />
+        <Button fx:id="cancelButton" layoutX="235.0" layoutY="95.0" mnemonicParsing="false" onAction="#closeWin" style="-fx-background-color: #5BBDFD;" text="Cancel">
+            <font>
+                <Font name="Avenir Next Bold" size="13.0" />
+            </font>
+            <effect>
+                <Glow />
+            </effect></Button>
+        <Button fx:id="saveButton" layoutX="304.0" layoutY="95.0" mnemonicParsing="false" onAction="#editPlaylist" style="-fx-background-color: #5BBDFD;" text="Save">
+            <effect>
+                <Glow />
+            </effect>
+            <font>
+                <Font name="Avenir Next Bold" size="13.0" />
+            </font></Button>
+    </children>
+</AnchorPane>
