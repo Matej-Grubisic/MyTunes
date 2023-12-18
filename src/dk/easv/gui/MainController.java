@@ -4,9 +4,8 @@ import dk.easv.be.Song;
 import dk.easv.dal.ArtistDAO;
 import dk.easv.dal.PlaylistDAO;
 import dk.easv.dal.SongDAO;
-import dk.easv.gui.otherControllers.EditPlaylistController;
 import dk.easv.gui.otherControllers.EditSongController;
-import dk.easv.gui.otherControllers.NewPlaylistController;
+import dk.easv.gui.otherControllers.MediaController;
 import dk.easv.gui.otherControllers.NewSongController;
 import dk.easv.gui.sharedClasses.PlaylistTable;
 import dk.easv.gui.sharedClasses.PlaylistSongTable;
@@ -42,6 +41,8 @@ public class MainController {
     private PlaylistTable playlistTableSingle = PlaylistTable.getInstance();
     private PlaylistSongTable playlistSongTable = PlaylistSongTable.getInstance();
 
+    private MediaController mediaController = MediaController.getInstance();
+
     public ListView playlistSongListView;
 
     public Button btnPlaylistN;
@@ -58,6 +59,7 @@ public class MainController {
     public TableColumn<Playlist, String> colTitle1;
 
     public TextField songSearchI;
+
     private final PlaylistDAO PlaylistDAO = new PlaylistDAO();
     private final ArtistDAO ArtistDAO = new ArtistDAO();
     
@@ -140,7 +142,8 @@ public class MainController {
                 String categoryName = getCategoryName(Category);
                 System.out.println("Category:" + Category);
                 System.out.println("Category name:" + categoryName);
-                Song s = new Song(Title, artist5, categoryName, id);
+                Song s = new Song(id, Title, Artist, Category, Time, File);
+
                 mySongs.add(s);
 
             }
@@ -154,7 +157,6 @@ public class MainController {
         private void playlistIni() {
             List<Playlist> allPlaylist = PlaylistDAO.getAllPlaylists();
             colTitle1.setCellValueFactory(new PropertyValueFactory<>("PlaylistName"));
-
 
             int index = 0;
             for(Playlist value : allPlaylist){
@@ -180,7 +182,6 @@ public class MainController {
                 index++;
             }
 
-
             playlistTableSingle.getPlaylistTable().setRowFactory(tv -> {
                 TableRow<Playlist> row = new TableRow<>();
                 row.setOnMouseClicked(event -> {
@@ -193,12 +194,19 @@ public class MainController {
             });
         }
 
+
     private void showPlaylistSongTable(Playlist selectedPlaylist){
+        // Clear Playlist
         playlistSongTable.getPlaylistSongTable().getItems().clear();
+
         if(selectedPlaylist.getSongList() != null){
+            // Load the playlist to the table view
             for(Song value : selectedPlaylist.getSongList()){
                 playlistSongTable.getPlaylistSongTable().getItems().add(value.getTitle());
             }
+
+            // Load the playlist to the Media Controller
+            mediaController.setIniSongList(selectedPlaylist.getSongList());
         }
     }
 
@@ -264,31 +272,16 @@ public class MainController {
     @FXML
     private void editPlaylist(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader2 = new FXMLLoader(
-                getClass().getResource("fxmlFiles/EditPlaylist.fxml")
+                getClass().getResource("fxmlFiles/NewPlaylist.fxml")
         );
         Parent root = loader2.load();
-        EditPlaylistController editPlaylistController = loader2.getController();
-        Playlist p = tablePlaylist1.getSelectionModel().getSelectedItem();
-        editPlaylistController.playlistId(p);
-        tablePlaylist1.setEditable(true);
-        tablePlaylist1.getItems().remove(p);
-        tablePlaylist1.setEditable(false);
-        editPlaylistController.setParentController(this);
         Stage addStage = new Stage();
         addStage.setScene(new Scene(root));
         addStage.setTitle("Edit Playlist");
         addStage.show();
     }
 
-    public void setPlaylistData(Playlist p) throws SQLException {
-        colTitle1.setCellValueFactory(new PropertyValueFactory<>("PlaylistName"));
-        tablePlaylist1.getItems().add(p);
-    }
 
-    public void setPlaylistDataEdit(Playlist p) throws SQLException {
-        colTitle1.setCellValueFactory(new PropertyValueFactory<>("PlaylistName"));
-        tablePlaylist1.getItems().add(p);
-    }
 
     @FXML
     private void deletePlaylist(ActionEvent actionEvent) throws IOException{
@@ -334,12 +327,10 @@ public class MainController {
     }
 
     public void playSong() throws SQLException, IOException {
-        Song s = tableSong.getSelectionModel().getSelectedItem();
-        Song s1 = SongDAO.getSong(s.getId());
-        String filepath = s1.getFilepath();
-        labelPlaying.setText(s.getTitle() + " is playing");
-        tableSong.getItems();
-        onStartSong(filepath);
+        mediaController.playSong();
+
+
+
     }
 
     public void playNext(){

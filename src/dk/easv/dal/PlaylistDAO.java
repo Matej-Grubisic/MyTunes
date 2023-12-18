@@ -32,13 +32,13 @@ public class PlaylistDAO implements IPlaylistDAO{
     }
 
     @Override
-    public void updatePlaylist(String name, int id) {
+    public void updatePlaylist(Playlist pLaylist) {
         try(Connection con = DatabaseConnection.getConn())
         {
             String sql = "UPDATE Playlist SET IDPlaylist=?, PlaylistName=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, name);
-            pstmt.setInt(2, id);
+            pstmt.setString(1, pLaylist.getPlaylistName());
+            pstmt.setInt(2, pLaylist.getId());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
