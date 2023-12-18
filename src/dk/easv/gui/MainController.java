@@ -11,6 +11,7 @@ import dk.easv.gui.otherControllers.NewSongController;
 import dk.easv.gui.sharedClasses.PlaylistTable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +40,7 @@ import static dk.easv.bll.DatabaseConnection.getConn;
 public class MainController {
     private PlaylistTable playlistTableSingle = PlaylistTable.getInstance();
 
-
+    boolean isPlaying;
     public Label lblMain;
     public Button btnPlaylistN;
     public Button btnPlaylistE;
@@ -83,8 +85,10 @@ public class MainController {
 
     private Song s;
     private Playlist playlist;
+    int indexS;
 
     boolean status = false;
+    Iterator<String> itr;
 
     @FXML
     private void initialize(){
@@ -264,7 +268,6 @@ public class MainController {
             default -> "None";
         };
     }
-
     public void setSongData(Song s) throws SQLException {
         String filepath = s.getFilepath();
         String title = s.getTitle();
@@ -288,12 +291,30 @@ public class MainController {
     }
 
     public void playSong() throws SQLException, IOException {
+
         Song s = tableSong.getSelectionModel().getSelectedItem();
-        Song s1 = SongDAO.getSong(s.getId());
-        String filepath = s1.getFilepath();
+        //indexS then do table.get(indexS)
+        //then you can get the id and the filepaths for the songs
+        //You then have to make this shit go foreach element and go to the next after finishing
+        //then done.
+
+        //table.get(s);
         labelPlaying.setText(s.getTitle() + " is playing");
-        tableSong.getItems();
-        onStartSong(filepath);
+        List<Song> table = tableSong.getItems();
+        List<String> list = new ArrayList<String>();
+        for (Song i:table){
+            System.out.println(i);
+            Song s1 = SongDAO.getSong(i.getId());
+            String filepath = s1.getFilepath();
+            list.add(filepath);
+        }
+        itr = list.iterator();
+        System.out.println(list);
+        /*
+        indexS = table.indexOf(s);
+
+        */
+        onStartSong(itr.next());
     }
 
     public void playNext(){
@@ -304,17 +325,32 @@ public class MainController {
 
     }
 
-    private void onStartSong(String filepath){
+    private void onStartSong(String filepath) throws SQLException {
         Media pick = new Media(new File(filepath).toURI().toString());
         player = new MediaPlayer(pick);
         player.play();
-        playButton.setSelected(true);
+        player.setOnEndOfMedia(new Runnable() {
+            @Override
+            public void run() {
+                player.stop();
+                if(itr.hasNext()){
+                    try {
+                        onStartSong(itr.next());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+
         player.currentTimeProperty().addListener(new ChangeListener<Duration>() {
             @Override
             public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
                 currentDuration.setText(String.valueOf(formatter.format(newValue.toSeconds())));
             }
         });
+
+
 
         player.setOnReady(() -> {
             totalTime = player.getMedia().getDuration();
@@ -326,10 +362,14 @@ public class MainController {
 
         playButton.setOnAction(e -> {
             play();
+            isPlaying = true;
+            playButton.setSelected(true);
         });
 
         pauseButton.setOnAction(e -> {
             pause();
+            isPlaying = false;
+            pauseButton.setSelected(true);
         });
     }
 
@@ -342,6 +382,5 @@ public class MainController {
         player.pause();
         playButton.setSelected(false);
     }
-
 
 }
