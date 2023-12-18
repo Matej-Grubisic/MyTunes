@@ -39,6 +39,8 @@ public class MediaController {
 
 
     private void iniSongList() {
+        if(songList == null || songList.size() < 1){ return; }
+
         if(mPlayer != null){
             mPlayer.stop();
             mPlayer.dispose();
@@ -49,12 +51,10 @@ public class MediaController {
 
         if(songList.getFirst().getFilepath() != null){
             File songFile = new File( songList.getFirst().getFilepath() );
-
             if(songFile != null){
                 mPlayer = new MediaPlayer(new Media( songFile.toURI().toString() ));
             }
         }
-
     }
 
 

@@ -386,11 +386,19 @@ public class MainController {
         Playlist selectedPlaylist = playlistTableSingle.getPlaylistTable().getSelectionModel().getSelectedItem();
 
         if(selectedSong != null && selectedPlaylist != null){
+
+
             // Add to the list
-           playlistSongTable.getPlaylistSongTable().getItems().add(selectedSong.getTitle());
+            playlistSongTable.getPlaylistSongTable().getItems().add(selectedSong.getTitle());
             // Add to the DB
-           PlaylistDAO.addSongToPlaylist(selectedSong, selectedPlaylist);
+            PlaylistDAO.addSongToPlaylist(selectedSong, selectedPlaylist);
             // Add to the playlist Array
+
+            if(selectedPlaylist.getSongList() != null){
+                selectedPlaylist.getSongList().add(selectedSong);
+            }
+
+            mediaController.setIniSongList(selectedPlaylist.getSongList());
         }
     }
 
