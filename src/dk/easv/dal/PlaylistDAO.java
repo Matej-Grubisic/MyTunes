@@ -1,6 +1,7 @@
 package dk.easv.dal;
 
 import dk.easv.be.Playlist;
+import dk.easv.be.Song;
 import dk.easv.bll.DatabaseConnection;
 
 import java.sql.*;
@@ -10,39 +11,6 @@ import java.util.List;
 public class PlaylistDAO implements IPlaylistDAO{
 
     @Override
-    public Playlist getPlaylistfromID(int id) throws SQLException {
-        try(Connection conn = DatabaseConnection.getConn()){
-            String sql = "SELECT IDPlaylist, PlaylistName FROM Playlist WHERE IDPlaylist=?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            ResultSet rs = pstmt.executeQuery();
-            while(rs.next()){
-                int pid = rs.getInt("IDPlaylist");
-                String playlistName = rs.getString("PlaylistName");
-                Playlist playlist = new Playlist(pid, playlistName);
-                return playlist;
-            }
-            return null;
-        }
-    }
-    @Override
-    public Playlist getPlaylistfromName(String name) throws SQLException {
-        try(Connection conn = DatabaseConnection.getConn()){
-            String sql = "SELECT IDPlaylist, PlaylistName FROM Playlist WHERE PlaylistName=?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, name);
-            ResultSet rs = pstmt.executeQuery();
-            while(rs.next()){
-                int pid = rs.getInt("IDPlaylist");
-                String playlistName = rs.getString("PlaylistName");
-                Playlist playlist = new Playlist(pid, playlistName);
-                return playlist;
-            }
-            return null;
-        }
-    }
-
-    @Override
     public void deletePlaylist(int id) {
         try(Connection con = DatabaseConnection.getConn())
         {
@@ -50,19 +18,27 @@ public class PlaylistDAO implements IPlaylistDAO{
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, id);
             pstmt.execute();
+
+            // Delete Playlist Songs
+
+            String sql2 = "DELETE FROM dbo.PlaylistSongs WHERE IDPlaylist=?";
+            PreparedStatement pstmt2 = con.prepareStatement(sql2);
+            pstmt2.setInt(1, id);
+            pstmt2.execute();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void updatePlaylist(String name, int id) {
+    public void updatePlaylist(Playlist pLaylist) {
         try(Connection con = DatabaseConnection.getConn())
         {
-            String sql = "UPDATE Playlist SET PlaylistName=? WHERE IDPlaylist=?";
+            String sql = "UPDATE Playlist SET IDPlaylist=?, PlaylistName=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, name);
-            pstmt.setInt(2, id);
+            pstmt.setString(1, pLaylist.getPlaylistName());
+            pstmt.setInt(2, pLaylist.getId());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -117,4 +93,39 @@ public class PlaylistDAO implements IPlaylistDAO{
         }
     }
 
+    public void addSongToPlaylist(Song selectedSong, Playlist selectedPlaylist) {
+        try(Connection con = DatabaseConnection.getConn())
+        {
+            String sql = "INSERT INTO  PlaylistSongs(SongOrder, IDSong, IDPlaylist) VALUES (?,?,?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, 0);
+            pstmt.setInt(2, selectedSong.getId());
+            pstmt.setInt(3, selectedPlaylist.getId());
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Integer> getSongToPlaylist(int playlistId) {
+        ArrayList<Integer> songIds = new ArrayList<>();
+
+        try(Connection con = DatabaseConnection.getConn())
+        {
+            String sql = "SELECT * FROM PlaylistSongs WHERE IDPlaylist = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, playlistId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()){
+                int SongID = rs.getInt("IDSong");
+                songIds.add(SongID);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return songIds;
+    }
 }
