@@ -1,0 +1,68 @@
+.table-view {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background{
+    -fx-background-color:  #5BBDFD;
+    -fx-padding: 0 0 5px 0;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+
+
+
+/*CELL COLOR*/
+
+.table-view .table-cell{
+    -fx-text-background-color: #000000;
+    -fx-font-size: 14px;
+    -fx-border-color: transparent;
+    -fx-padding: 10px;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #5BBDFD;
+
+    -fx-padding: 0.0em;
+}
+.table-row-cell:even{
+    -fx-background-color: rgba(91, 189, 253, 0.83);
+    -fx-padding: 0.0em;
+}
+
+
+
+
+.table-view .column-header-background .centered-column .label,
+.table-view .centered-column .table-cell {
+    -fx-alignment: CENTER; /* Align text in the second column and its title to the center */
+}
+
+.table-view .column-header-background .label {
+    -fx-alignment: CENTER-LEFT; /* Align text to the left for other headers */
+}
+
+.table-cell {
+    -fx-alignment: CENTER-LEFT; /* Align cell content to the left for other columns */
+}
+
+.table-cell.centered-column {
+    -fx-alignment: CENTER; /* Align cell content in the second column to the center */
+}
