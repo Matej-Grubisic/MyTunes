@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="522.0" prefWidth="811.0" style="-fx-background-color: #4496CC;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.gui.MainController">
+<AnchorPane prefHeight="522.0" prefWidth="811.0" style="-fx-background-color: #4496CC;" stylesheets="@styles/Table.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.gui.MainController">
    <children>
       <VBox layoutX="33.0" layoutY="161.0" prefHeight="282.0" prefWidth="179.0">
          <children>
@@ -61,11 +61,20 @@
       <Button layoutX="314.0" layoutY="467.0" mnemonicParsing="false" text="Button" />
       <Button layoutX="380.0" layoutY="467.0" mnemonicParsing="false" text="Delete" />
 
-      <Button fx:id="btnSongE" layoutX="614.0" layoutY="466.0" mnemonicParsing="false" onAction="#editSong" prefHeight="26.0" prefWidth="60.0" text="Edit">
+      <Button fx:id="btnSongE" layoutX="614.0" layoutY="466.0" mnemonicParsing="false" onAction="#editSong" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: #5BBDFD;" text="Edit">
          <font>
             <Font name="Avenir Next Bold" size="13.0" />
-         </font></Button>
-      <Button layoutX="687.0" layoutY="466.0" mnemonicParsing="false" onAction="#deleteSong" prefHeight="26.0" prefWidth="77.0" text="Delete" />
+         </font>
+         <effect>
+            <Glow />
+         </effect></Button>
+      <Button layoutX="687.0" layoutY="466.0" mnemonicParsing="false" onAction="#deleteSong" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #5BBDFD;" text="Delete">
+         <font>
+            <Font name="Avenir Next Bold" size="13.0" />
+         </font>
+         <effect>
+            <Glow />
+         </effect></Button>
       <Button layoutX="780.0" layoutY="495.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="29.0" style="-fx-background-color: #5BBDFD;">
          <graphic>
             <FontAwesomeIconView glyphName="CLOSE" />
@@ -73,7 +82,13 @@
          <effect>
             <Glow />
          </effect></Button>
-      <Button layoutX="432.0" layoutY="161.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="29.0" text="..." />
+      <Button layoutX="432.0" layoutY="161.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="38.0" style="-fx-background-color: #5BBDFD;">
+         <graphic>
+            <FontAwesomeIconView glyphName="ARROW_LEFT" size="14" />
+         </graphic>
+         <effect>
+            <Glow />
+         </effect></Button>
       <TextField fx:id="songSearchI" layoutX="597.0" layoutY="25.0" prefHeight="28.0" prefWidth="140.0" />
       <Button layoutX="745.0" layoutY="25.0" mnemonicParsing="false" onAction="#searchSong" style="-fx-background-color: #5BBDFD;" text="Find">
          <font>
@@ -82,7 +97,7 @@
          <effect>
             <Glow />
          </effect></Button>
-      <Label fx:id="labelPlaying" layoutX="269.0" layoutY="71.0" prefHeight="37.0" prefWidth="221.0" text="Label">
+      <Label fx:id="labelPlaying" layoutX="314.0" layoutY="77.0" prefHeight="37.0" prefWidth="221.0" text="Label">
          <font>
             <Font name="Arial Black" size="13.0" />
          </font></Label>
@@ -124,10 +139,13 @@
             <Glow level="0.15" />
          </effect></ToggleButton>
       <Label layoutX="124.0" layoutY="100.0" text="/" />
-      <Button fx:id="btnSongN" layoutX="520.0" layoutY="467.0" mnemonicParsing="false" onAction="#newSong" prefHeight="26.0" prefWidth="77.0" text="Add">
+      <Button fx:id="btnSongN" layoutX="520.0" layoutY="467.0" mnemonicParsing="false" onAction="#newSong" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #5BBDFD;" text="New">
          <font>
             <Font name="Avenir Next Bold" size="13.0" />
-         </font></Button>
+         </font>
+         <effect>
+            <Glow />
+         </effect></Button>
    </children>
    <effect>
       <ColorAdjust hue="-0.03" saturation="-0.45" />

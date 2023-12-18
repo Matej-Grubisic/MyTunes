@@ -31,7 +31,7 @@
 /*CELL COLOR*/
 
 .table-view .table-cell{
-    -fx-text-background-color: #000000;
+    -fx-text-background-color: white;
     -fx-font-size: 14px;
     -fx-border-color: transparent;
     -fx-padding: 10px;
