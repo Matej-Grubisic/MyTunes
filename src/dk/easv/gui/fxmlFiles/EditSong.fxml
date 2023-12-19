@@ -5,30 +5,68 @@
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="287.0" prefWidth="521.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.gui.otherControllers.EditSongController">
+<AnchorPane prefHeight="225.0" prefWidth="521.0" style="-fx-background-color: #98D7FF;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dk.easv.gui.otherControllers.EditSongController">
     <children>
-        <Label layoutX="92.0" layoutY="31.0" text="Title" />
-        <Label layoutX="92.0" layoutY="69.0" prefHeight="18.0" prefWidth="41.0" text="Artist" />
-        <Label layoutX="92.0" layoutY="107.0" text="Category" />
-        <Label layoutX="92.0" layoutY="149.0" prefHeight="18.0" prefWidth="42.0" text="Time" />
-        <TextField fx:id="titleField" layoutX="158.0" layoutY="27.0"/>
+        <Label layoutX="105.0" layoutY="31.0" text="Title">
+         <font>
+            <Font name="Avenir Next Bold" size="13.0" />
+         </font></Label>
+        <Label layoutX="101.0" layoutY="67.0" prefHeight="19.0" prefWidth="36.0" text="Artist">
+         <font>
+            <Font name="Avenir Next Condensed Bold" size="15.0" />
+         </font></Label>
+        <Label layoutX="92.0" layoutY="107.0" text="Category">
+         <font>
+            <Font name="Avenir Next Condensed Bold" size="15.0" />
+         </font></Label>
+        <Label layoutX="101.0" layoutY="147.0" prefHeight="23.0" prefWidth="36.0" text="Time" textAlignment="CENTER">
+         <font>
+            <Font name="Avenir Next Condensed Bold" size="15.0" />
+         </font></Label>
+        <TextField fx:id="titleField" layoutX="158.0" layoutY="27.0" />
         <TextField fx:id="artistField" layoutX="158.0" layoutY="65.0" />
 
         <TextField fx:id="timeField" layoutX="158.0" layoutY="145.0" prefHeight="26.0" prefWidth="197.0" />
 
-        <Button fx:id="btnClose" layoutX="387.0" layoutY="233.0" mnemonicParsing="false" onAction="#closeWin" text="Cancel" />
-        <Button fx:id="btnSave" layoutX="452.0" layoutY="233.0" mnemonicParsing="false" onAction="#editSong" text="Save" />
-        <MenuButton fx:id="btnDrop" layoutX="158.0" layoutY="105.0" mnemonicParsing="false" text="MenuButton">
+        <Button fx:id="btnClose" layoutX="387.0" layoutY="188.0" mnemonicParsing="false" onAction="#closeWin" style="-fx-background-color: #5BBDFD;" text="Cancel">
+         <font>
+            <Font name="Avenir Next Bold" size="13.0" />
+         </font>
+         <effect>
+            <Glow />
+         </effect></Button>
+        <Button fx:id="btnSave" layoutX="454.0" layoutY="188.0" mnemonicParsing="false" onAction="#editSong" style="-fx-background-color: #5BBDFD;" text="Save">
+         <effect>
+            <Glow />
+         </effect>
+         <font>
+            <Font name="Avenir Next Bold" size="13.0" />
+         </font></Button>
+        <MenuButton fx:id="btnDrop" layoutX="158.0" layoutY="105.0" mnemonicParsing="false" style="-fx-background-color: #5BBDFD;" text="MenuButton">
             <items>
-                <MenuItem mnemonicParsing="false" text="Pop" onAction="#getPop" />
-                <MenuItem mnemonicParsing="false" text="Hip hop" onAction="#getHop"/>
-                <MenuItem mnemonicParsing="false" text="Rap" onAction="#getRap"/>
-                <MenuItem mnemonicParsing="false" text="Rock" onAction="#getRock"/>
+                <MenuItem mnemonicParsing="false" onAction="#getPop" text="Pop" />
+                <MenuItem mnemonicParsing="false" onAction="#getHop" text="Hip hop" />
+                <MenuItem mnemonicParsing="false" onAction="#getRap" text="Rap" />
+                <MenuItem mnemonicParsing="false" onAction="#getRock" text="Rock" />
             </items>
+         <font>
+            <Font name="Avenir Next Bold" size="13.0" />
+         </font>
+         <effect>
+            <Glow />
+         </effect>
         </MenuButton>
-        <Button layoutX="283.0" layoutY="104.0" mnemonicParsing="false" text="More..." />
+        <Button layoutX="283.0" layoutY="104.0" mnemonicParsing="false" style="-fx-background-color: #5BBDFD;" text="More...">
+         <font>
+            <Font name="Avenir Next Bold" size="13.0" />
+         </font>
+         <effect>
+            <Glow />
+         </effect></Button>
 
     </children>
 </AnchorPane>
