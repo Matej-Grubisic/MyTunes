@@ -101,24 +101,6 @@
          <font>
             <Font name="Arial Black" size="13.0" />
          </font></Label>
-      <Button fx:id="forwardButton" layoutX="229.0" layoutY="32.0" mnemonicParsing="false" onAction="#playNext" prefHeight="28.0" prefWidth="52.0" style="-fx-background-color: #5BBDFD;">
-         <effect>
-            <Glow />
-         </effect>
-         <graphic>
-            <FontAwesomeIconView glyphName="FORWARD" size="14">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </FontAwesomeIconView>
-         </graphic></Button>
-      <Button fx:id="previousButton" layoutX="33.0" layoutY="32.0" mnemonicParsing="false" onAction="#playPrevious" prefHeight="26.0" prefWidth="52.0" style="-fx-background-color: #5BBDFD;">
-         <effect>
-            <Glow />
-         </effect>
-         <graphic>
-            <FontAwesomeIconView glyphName="BACKWARD" size="14" />
-         </graphic></Button>
       <Label fx:id="totalDuration" layoutX="150.0" layoutY="95.0" prefHeight="26.0" prefWidth="69.0" text="Label" />
       <Label fx:id="currentDuration" layoutX="73.0" layoutY="95.0" prefHeight="26.0" prefWidth="69.0" text="Label" />
       <ToggleButton fx:id="pauseButton" layoutX="165.0" layoutY="32.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="52.0" style="-fx-background-color: #5BBDFD;">

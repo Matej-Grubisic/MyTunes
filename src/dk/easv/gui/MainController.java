@@ -155,7 +155,7 @@ public class MainController {
                 String categoryName = getCategoryName(Category);
                 System.out.println("Category:" + Category);
                 System.out.println("Category name:" + categoryName);
-                Song s = new Song(id, Title, Artist, Category, Time, File);
+                Song s = new Song(id, Title, artist5, categoryName, Time, File);
 
                 mySongs.add(s);
 

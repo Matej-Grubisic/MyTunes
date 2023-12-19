@@ -56,6 +56,14 @@ public class Song {
         this.id = id;
     }
 
+    public Song(Integer id, String title, String artist5, String categoryName, String time, String file) {
+        this.id = id;
+        this.title = title;
+        this.artistString = artist5;
+        this.categoryName = categoryName;
+        this.time = time;
+        this.filepath = file;
+    }
 
 
     public int getId() {
